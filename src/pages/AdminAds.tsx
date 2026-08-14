@@ -4,7 +4,7 @@ import { Trash2 } from 'lucide-react'
 import { api, errorMessage, ApiError } from '../lib/api'
 import { useApiQuery } from '../lib/hooks'
 import { queryKeys } from '../lib/queryKeys'
-import { Loading } from '../components/Async'
+import { TableRowsSkeleton } from '../components/Skeletons'
 import { Button } from '../components/ui/button'
 import { Badge } from '../components/ui/badge'
 import { Input } from '../components/ui/input'
@@ -72,7 +72,7 @@ export function AdminAds() {
         </CardHeader>
         <CardContent className="p-0">
           {list.isLoading ? (
-            <Loading label="Loading ads…" />
+            <TableRowsSkeleton />
           ) : (
             <Table>
               <TableHeader>

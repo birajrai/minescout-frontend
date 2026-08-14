@@ -3,7 +3,8 @@ import { Link, useParams, useSearchParams } from 'react-router'
 import { Search, ChevronLeft, ChevronRight, X } from 'lucide-react'
 import { PageHero } from '../components/Shared'
 import { useBlogList, useBlogPost, Markdown } from '../lib/cms'
-import { Loading, ErrorState } from '../components/Async'
+import { ErrorState } from '../components/Async'
+import { ContentSkeleton } from '../components/Skeletons'
 import { ApiError } from '../lib/api'
 import { NotFound } from './NotFound'
 
@@ -61,7 +62,7 @@ export function BlogIndex() {
           )}
         </div>
         {list.isLoading ? (
-          <Loading label="Loading posts…" />
+          <ContentSkeleton />
         ) : list.error ? (
           <ErrorState error={list.error} onRetry={() => void list.refetch()} />
         ) : (
@@ -121,7 +122,7 @@ export function BlogPost() {
   const { slug } = useParams()
   const query = useBlogPost(slug ?? '')
 
-  if (query.isLoading) return <Loading label="Loading post…" />
+  if (query.isLoading) return <ContentSkeleton />
   if (query.error) {
     if ((query.error as ApiError).status === 404) return <NotFound />
     return <ErrorState error={query.error} onRetry={() => void query.refetch()} />

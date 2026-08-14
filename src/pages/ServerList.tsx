@@ -4,7 +4,8 @@ import { ChevronRight } from 'lucide-react'
 import { PageHero } from '../components/Shared'
 import { ListingCard } from '../components/ListingCard'
 import { useFacets, slugifyName } from '../lib/servers'
-import { Loading, ErrorState } from '../components/Async'
+import { ErrorState } from '../components/Async'
+import { ListingCardSkeleton } from '../components/Skeletons'
 import type { Server, ServerSort } from '../lib/types'
 import { api } from '../lib/api'
 import { queryKeys } from '../lib/queryKeys'
@@ -147,7 +148,7 @@ export function ServerList() {
 
   if (facetError) return <ErrorState error={facetError} onRetry={() => undefined} />
   if (!meta) return null
-  if (facetLoading || listQuery.isLoading) return <Loading label="Loading servers…" />
+  if (facetLoading || listQuery.isLoading) return <div className="flex flex-col gap-3">{Array.from({ length: 3 }).map((_, i) => <ListingCardSkeleton key={i} />)}</div>
   if (listQuery.error) return <ErrorState error={listQuery.error} onRetry={() => void listQuery.refetch()} />
 
   const sponsored = (listQuery.data?.results ?? []).filter((s) => s.featured)

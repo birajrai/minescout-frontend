@@ -8,7 +8,8 @@ import { useAuth } from '../lib/auth'
 import { formatPlayers } from '../lib/servers'
 import { serverUrl } from '../lib/servers'
 import { isSaved, useChestActions } from '../lib/chest'
-import { Loading, ErrorState } from '../components/Async'
+import { ErrorState } from '../components/Async'
+import { ContentSkeleton } from '../components/Skeletons'
 import { NotFound } from './NotFound'
 import type { Server } from '../lib/types'
 
@@ -60,7 +61,7 @@ export function ServerLayout() {
     },
   })
 
-  if (query.isLoading) return <Loading label="Loading server…" />
+  if (query.isLoading) return <ContentSkeleton />
   if (query.error) {
     if ((query.error as ApiError).status === 404) return <NotFound />
     return <ErrorState error={query.error} onRetry={() => void query.refetch()} />
@@ -109,7 +110,7 @@ export function ServerLayout() {
     <>
       <header className="server-hero relative flex flex-col w-full overflow-hidden border-b border-stone-300 dark:border-stone-700">
         <div className="server-hero__media-spacer" aria-hidden="true" />
-        <video className="server-hero__brand-video" width="1200" height="240" autoPlay loop muted playsInline preload="metadata" poster="/brand/minelist_banner_poster.webp?v=1786293318" src="/brand/minelist_banner.webm?v=1786293318" />
+        <video className="server-hero__brand-video" width="1200" height="240" autoPlay loop muted playsInline preload="metadata" poster="/brand/minescout_banner_poster.webp?v=1786293318" src="/brand/minescout_banner.webm?v=1786293318" />
         <div className="server-hero__overlay">
           <div className="server-hero__brand">
             <span className="font-minecraft text-2xl md:text-3xl text-stone-100">Minescout</span>

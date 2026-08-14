@@ -4,7 +4,7 @@ import { Copy, Check, KeyRound, Trash2 } from 'lucide-react'
 import { api, errorMessage, ApiError } from '../lib/api'
 import { useApiQuery } from '../lib/hooks'
 import { queryKeys } from '../lib/queryKeys'
-import { Loading } from '../components/Async'
+import { TableRowsSkeleton } from '../components/Skeletons'
 import { Button } from '../components/ui/button'
 import { Badge } from '../components/ui/badge'
 import { Input } from '../components/ui/input'
@@ -81,7 +81,7 @@ export function AdminApiKeys() {
       <Card>
         <CardContent className="p-0">
           {list.isLoading ? (
-            <Loading label="Loading API keys…" />
+            <TableRowsSkeleton />
           ) : (list.data ?? []).length === 0 ? (
             <div className="p-8 text-center text-sm text-muted-foreground">No API keys yet.</div>
           ) : (

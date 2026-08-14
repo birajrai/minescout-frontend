@@ -1,7 +1,8 @@
 import { Link } from 'react-router'
 import { Receipt } from 'lucide-react'
 import { useMyTransactions, formatMoney } from '../../lib/billing'
-import { Loading, ErrorState } from '../../components/Async'
+import { ErrorState } from '../../components/Async'
+import { TableRowsSkeleton } from '../../components/Skeletons'
 
 const STATUS_BADGE: Record<string, { label: string; cls: string }> = {
   pending: { label: 'Pending', cls: 'bg-blue-500/20 text-blue-700 dark:text-blue-400' },
@@ -14,7 +15,7 @@ const STATUS_BADGE: Record<string, { label: string; cls: string }> = {
 export function TransactionsPage() {
   const q = useMyTransactions()
 
-  if (q.isLoading) return <Loading label="Loading transactions…" />
+  if (q.isLoading) return <TableRowsSkeleton />
   if (q.error) return <ErrorState error={q.error} onRetry={() => void q.refetch()} />
 
   const txs = q.data ?? []

@@ -3,7 +3,7 @@ import { Search, ExternalLink } from 'lucide-react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { api, errorMessage, ApiError } from '../lib/api'
 import { useAdminServers } from '../lib/admin-api'
-import { Loading } from '../components/Async'
+import { TableRowsSkeleton } from '../components/Skeletons'
 import { Button } from '../components/ui/button'
 import { Input } from '../components/ui/input'
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card'
@@ -63,7 +63,7 @@ export function AdminServers() {
         </CardHeader>
         <CardContent className="p-0">
           {list.isLoading ? (
-            <Loading label="Loading servers…" />
+            <TableRowsSkeleton />
           ) : rows.length === 0 ? (
             <div className="p-8 text-center text-sm text-muted-foreground">No servers found.</div>
           ) : (

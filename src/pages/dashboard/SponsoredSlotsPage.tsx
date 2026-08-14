@@ -1,7 +1,8 @@
 import { Link } from 'react-router'
 import { Megaphone } from 'lucide-react'
 import { useMyPlacements } from '../../lib/billing'
-import { Loading, ErrorState } from '../../components/Async'
+import { ErrorState } from '../../components/Async'
+import { ContentSkeleton } from '../../components/Skeletons'
 
 const TYPE_LABEL: Record<string, string> = {
   featured: 'Featured',
@@ -12,7 +13,7 @@ const TYPE_LABEL: Record<string, string> = {
 export function SponsoredSlotsPage() {
   const q = useMyPlacements()
 
-  if (q.isLoading) return <Loading label="Loading placements…" />
+  if (q.isLoading) return <ContentSkeleton />
   if (q.error) return <ErrorState error={q.error} onRetry={() => void q.refetch()} />
 
   const slots = q.data ?? []

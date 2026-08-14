@@ -4,31 +4,32 @@ import { Link, useSearchParams } from 'react-router'
 import { FAQ_ITEMS } from '../data/faq'
 import { WELCOME_INTRO, WELCOME_SECTIONS } from '../data/welcome'
 import { ListingCard } from '../components/ListingCard'
+import { ListingCardSkeleton } from '../components/Skeletons'
 import { useServers, useGlobalStats } from '../lib/servers'
 import { useAds } from '../lib/ads'
-import { Loading, ErrorState } from '../components/Async'
+import { ErrorState } from '../components/Async'
 import type { Server } from '../lib/types'
 
 const FAQ_ORDER = [
   'What’s the best Minecraft server to join in 2026?',
   'How do I join a Minecraft server using the server IP?',
-  'What features does Minelist offer for Minecraft players?',
-  'How can Minecraft server owners benefit from Minelist?',
+  'What features does MineScout offer for Minecraft players?',
+  'How can Minecraft server owners benefit from MineScout?',
   'Do I need a premium (paid) Minecraft account to join these servers?',
   'Can I join from Bedrock (mobile, Xbox, PlayStation) or only Java?',
   'A server says it supports many Minecraft versions—will gameplay still feel normal?',
   'What does “Server is full” mean and what can I do?',
-  'How can server owners promote their server on Minelist?',
-  'Which Votifier protocols does Minelist support for in-game vote rewards?',
+  'How can server owners promote their server on MineScout?',
+  'Which Votifier protocols does MineScout support for in-game vote rewards?',
   'How do I get more players on my Minecraft server?',
-  'Why can’t I connect to a server even though it looks online on Minelist?',
-  'Are Minecraft servers on Minelist safe to join?',
+  'Why can’t I connect to a server even though it looks online on MineScout?',
+  'Are Minecraft servers on MineScout safe to join?',
   'How do I know if a Minecraft server is really active or just looks active?',
   'Can I play with friends on the same Minecraft server?',
   'Do Minecraft servers reset their worlds?',
   'What’s the fastest way to find a Minecraft server I’ll actually like?',
   'Are Minecraft servers down—or is it just one server / my login?',
-  'Is there a Minecraft server status checker or MC server tester on Minelist?',
+  'Is there a Minecraft server status checker or MC server tester on MineScout?',
   'How do I make a Minecraft server, pick ports, or host on a laptop?',
   'Where can I find modded Minecraft servers or modded server ideas?',
   'Where are Java SMP servers or Minecraft Java SMP servers listed?',
@@ -37,14 +38,14 @@ const FAQ_ORDER = [
   'Can I browse Minecraft servers by version (1.21.8, 1.8.8, 1.20, etc.)?',
   'Where are Minecraft PE servers, MCPE servers, or Bedrock servers?',
   'What is a Minecraft proxy or Geyser crossplay server?',
-  'How does Minecraft server ranking work on Minelist?',
+  'How does Minecraft server ranking work on MineScout?',
   'What is a Minecraft server IP address—and where do I paste it?',
   'Are there Skyblock, Prison, Skywars, or economy Minecraft servers here?',
   'What are Minecraft server jars—and do I need one to join a list server?',
   'What are Minecraft ranks on multiplayer servers?',
   'Where can I find OneBlock, Lifesteal, Towny, or Skywars servers?',
   'How do I find new Minecraft servers or horror / spooky themed worlds?',
-  'Is Minelist a Minecraft server host (free server, Aternos, etc.)?',
+  'Is MineScout a Minecraft server host (free server, Aternos, etc.)?',
   'How do I search the whole Minecraft server list (advanced search)?',
 ]
 
@@ -152,7 +153,14 @@ export function Home() {
     changeSort(v)
   }
 
-  if (serversQuery.isLoading || statsQuery.isLoading) return <Loading label="Loading servers…" />
+  if (serversQuery.isLoading || statsQuery.isLoading)
+    return (
+      <div className="flex flex-col gap-3">
+        {Array.from({ length: 3 }).map((_, i) => (
+          <ListingCardSkeleton key={i} />
+        ))}
+      </div>
+    )
   if (serversQuery.error) return <ErrorState error={serversQuery.error} onRetry={() => void serversQuery.refetch()} />
 
   return (
@@ -167,10 +175,10 @@ export function Home() {
           muted
           playsInline
           preload="none"
-          poster="/brand/minelist_banner_poster.webp?v=1786293318"
+          poster="/brand/minescout_banner_poster.webp?v=1786293318"
           aria-hidden="true"
         >
-          <source src="/brand/minelist_banner.webm?v=1786293318" type="video/webm" />
+          <source src="/brand/minescout_banner.webm?v=1786293318" type="video/webm" />
         </video>
         <div className="home-hero__overlay" aria-hidden="true" />
         <div className="home-hero__inner wrapper">
@@ -261,7 +269,11 @@ export function Home() {
 
           <div className="flex justify-center pt-2 pb-4">
             {serversQuery.isFetching ? (
-              <Loading label="Loading more…" />
+              <div className="flex flex-col gap-3">
+                {Array.from({ length: 2 }).map((_, i) => (
+                  <ListingCardSkeleton key={i} />
+                ))}
+              </div>
             ) : hasMore ? (
               <button type="button" onClick={loadMore} className="btn-wrapper relative rounded-md h-12 before:h-12 before:rounded-md before:border-2 before:border-b-[3px] before:border-stone-500/80 before:bg-stone-400/80 text-stone-900 show-more-btn">
                 <div className="btn-surface rounded-md font-bold border-2 border-b-[3px] border-stone-500 bg-stone-300 dark:bg-stone-400 px-4 py-3 text-base flex items-center gap-2">
@@ -281,10 +293,10 @@ export function Home() {
 
         <section className="wrapper">
           <img
-            src="/brand/minelist_landing_banner-1280.webp?v=1786293318"
-            srcSet="/brand/minelist_landing_banner-640.webp?v=1786293318 640w, /brand/minelist_landing_banner-1280.webp?v=1786293318 1280w"
+            src="/brand/minescout_landing_banner-1280.webp?v=1786293318"
+            srcSet="/brand/minescout_landing_banner-640.webp?v=1786293318 640w, /brand/minescout_landing_banner-1280.webp?v=1786293318 1280w"
             sizes="(max-width: 1280px) 100vw, 1280px"
-            alt="minelist banner"
+            alt="minescout banner"
             width="1280"
             height="266"
             loading="lazy"

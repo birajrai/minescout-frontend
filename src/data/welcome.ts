@@ -4,7 +4,7 @@ export interface WelcomeSection {
 }
 
 export const WELCOME_INTRO: string[] = [
-  "Minelist is not just another Minecraft server list tossed onto the internet and forgotten in a dark corner of Google. This is a hand-built, player-focused, keyword-loaded, chaos-filtering machine designed to help you find the best Minecraft servers without wasting your time on fake player counts, dead hubs, broken IPs, or servers that look like they were last updated during the Stone Age. Whether you are hunting for the best Minecraft SMP servers, cracked-friendly survival communities, huge Skyblock servers, sweaty Factions servers, classic Prison servers, wild Anarchy servers, or fresh Minecraft server IPs for Java and Bedrock, this is where the real search begins.",
+  "MineScout is not just another Minecraft server list tossed onto the internet and forgotten in a dark corner of Google. This is a hand-built, player-focused, keyword-loaded, chaos-filtering machine designed to help you find the best Minecraft servers without wasting your time on fake player counts, dead hubs, broken IPs, or servers that look like they were last updated during the Stone Age. Whether you are hunting for the best Minecraft SMP servers, cracked-friendly survival communities, huge Skyblock servers, sweaty Factions servers, classic Prison servers, wild Anarchy servers, or fresh Minecraft server IPs for Java and Bedrock, this is where the real search begins.",
   "The goal is simple: help players discover top Minecraft servers faster, easier, and with less nonsense. No endless clicking through junk. No scrolling through a graveyard of offline servers. No fake hype, no bloated clutter, no mystery meat listings with zero information. Just a clean, fast, modern Minecraft server directory built for people who actually want to join a server and play. If you are looking for a Minecraft server list for Java Edition, a Bedrock server list, or a place to discover new crossplay Minecraft servers, you’re in the right place.",
 ]
 
@@ -67,7 +67,7 @@ export const WELCOME_SECTIONS: WelcomeSection[] = [
     heading: "Can I support the site?",
     paras: [
       "Absolutely.",
-      "If you find a server you love, vote for it, share it, bookmark the page, and throw the name Minelist into every group chat where someone says, “Anybody know a good Minecraft server?” That is how real discovery happens. That is how new communities grow. That is how hidden gems stop being hidden.",
+      "If you find a server you love, vote for it, share it, bookmark the page, and throw the name MineScout into every group chat where someone says, “Anybody know a good Minecraft server?” That is how real discovery happens. That is how new communities grow. That is how hidden gems stop being hidden.",
       "A great Minecraft server directory only gets stronger when players actually use it, recommend it, and keep coming back whenever they want to find the next world worth logging into.",
     ],
   },
@@ -84,7 +84,7 @@ export const WELCOME_SECTIONS: WelcomeSection[] = [
     heading: "Final words from the blocky frontlines",
     paras: [
       "I do not believe players should have to dig through endless junk to find one good place to play. I do not believe every server list should look the same. And I definitely do not believe discovery has to be boring.",
-      "Minelist exists to help you find the best Minecraft servers, discover fresh communities, compare gamemodes, explore new server IPs, and jump into worlds worth your time. Whether you are searching for Minecraft SMP servers, best survival servers, top Skyblock servers, new modded servers, crossplay Bedrock and Java servers, or just one damn good server to call home, this is the place to start.",
+      "MineScout exists to help you find the best Minecraft servers, discover fresh communities, compare gamemodes, explore new server IPs, and jump into worlds worth your time. Whether you are searching for Minecraft SMP servers, best survival servers, top Skyblock servers, new modded servers, crossplay Bedrock and Java servers, or just one damn good server to call home, this is the place to start.",
       "So browse the listings, explore the categories, test a few servers, find your next obsession, and build something ridiculous.",
     ],
   },

@@ -1,8 +1,8 @@
-/* Minescout — minelist-parity frontend.
- * Base + reset + utilities are served by the minelist compiled CSS loaded in
+/* Minescout — frontend.
+ * Base + reset + utilities are served by the compiled CSS loaded in
  * index.html (/assets/css/tailwind.css + /assets/css/main.min.css).
  * This file adds shadcn/ui theme tokens + on-demand utilities on top (no
- * preflight reset, so the minelist-styled public pages are untouched). */
+ * preflight reset, so the Minescout-styled public pages are untouched). */
 
 @import 'tailwindcss' theme;
 @import 'tailwindcss' utilities;

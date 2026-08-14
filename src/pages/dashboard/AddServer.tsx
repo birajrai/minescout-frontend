@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { Link, useNavigate } from 'react-router'
 import { useMutation } from '@tanstack/react-query'
 import { api, errorMessage, ApiError } from '../../lib/api'
-import { Loading } from '../../components/Async'
 
 const ALLOWED_TAGS = ['SMP', 'Survival', 'PvP', 'Skyblock', 'Creative', 'Minigames', 'Vanilla', 'Modded']
 const EDITIONS = [
@@ -164,16 +163,12 @@ export function AddServer() {
           Whitelisted server
         </label>
 
-        {mutation.isPending ? (
-          <Loading label="Submitting…" />
-        ) : (
-          <div className="flex gap-2">
-            <button type="submit" className="btn-accent btn-wrapper relative before:border rounded-md before:rounded-md h-11 before:h-11 inline-flex">
-              <span className="btn-surface rounded-md font-bold border select-none w-full h-full px-6 inline-flex items-center justify-center text-sm text-stone-900">Submit for review</span>
-            </button>
-            <Link to="/dashboard" className="inline-flex items-center h-11 px-4 rounded-md border-2 border-stone-400 dark:border-stone-600 text-sm font-bold hover:bg-stone-200/60 dark:hover:bg-stone-700/60 transition-colors">Cancel</Link>
-          </div>
-        )}
+        <div className="flex gap-2">
+          <button type="submit" disabled={mutation.isPending} className="btn-accent btn-wrapper relative before:border rounded-md before:rounded-md h-11 before:h-11 inline-flex">
+            <span className="btn-surface rounded-md font-bold border select-none w-full h-full px-6 inline-flex items-center justify-center text-sm text-stone-900">{mutation.isPending ? 'Submitting…' : 'Submit for review'}</span>
+          </button>
+          <Link to="/dashboard" className="inline-flex items-center h-11 px-4 rounded-md border-2 border-stone-400 dark:border-stone-600 text-sm font-bold hover:bg-stone-200/60 dark:hover:bg-stone-700/60 transition-colors">Cancel</Link>
+        </div>
         <p className="text-xs text-stone-500 dark:text-stone-400">
           New servers appear on the public list after an admin verifies them. Until then they are visible here as "Pending".
         </p>

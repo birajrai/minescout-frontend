@@ -3,7 +3,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { ExternalLink, ShieldX, Trash2, Check, UserCheck, ShieldAlert } from 'lucide-react'
 import { api, errorMessage, ApiError } from '../lib/api'
 import { useAdminClaims, useAdminReports } from '../lib/admin-api'
-import { Loading } from '../components/Async'
+import { TableRowsSkeleton } from '../components/Skeletons'
 import { Button } from '../components/ui/button'
 import { Badge } from '../components/ui/badge'
 import { Checkbox } from '../components/ui/checkbox'
@@ -92,7 +92,7 @@ export function AdminModeration() {
       {error && <p className="rounded-md border border-destructive/40 bg-destructive/10 px-3 py-2 text-sm text-destructive">{errorMessage(error)}</p>}
 
       {claims.isLoading || reports.isLoading ? (
-        <Loading label="Loading moderation queue…" />
+        <TableRowsSkeleton />
       ) : (
         <Card>
           <CardContent className="p-0">

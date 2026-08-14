@@ -4,7 +4,7 @@ import { Search, Ban } from 'lucide-react'
 import { api, errorMessage, ApiError } from '../lib/api'
 import { useApiQuery } from '../lib/hooks'
 import { queryKeys } from '../lib/queryKeys'
-import { Loading } from '../components/Async'
+import { TableRowsSkeleton } from '../components/Skeletons'
 import { Button } from '../components/ui/button'
 import { Input } from '../components/ui/input'
 import { Card, CardContent } from '../components/ui/card'
@@ -56,7 +56,7 @@ export function AdminUsers() {
       <Card>
         <CardContent className="p-0">
           {list.isLoading ? (
-            <Loading label="Loading users…" />
+            <TableRowsSkeleton />
           ) : rows.length === 0 ? (
             <div className="p-8 text-center text-sm text-muted-foreground">No users found.</div>
           ) : (

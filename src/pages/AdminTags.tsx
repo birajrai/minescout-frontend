@@ -1,7 +1,8 @@
 import { useMemo, useState } from 'react'
 import { Search } from 'lucide-react'
 import { useFacets } from '../lib/servers'
-import { Loading, ErrorState } from '../components/Async'
+import { ErrorState } from '../components/Async'
+import { TableRowsSkeleton } from '../components/Skeletons'
 import { Input } from '../components/ui/input'
 import { Card, CardContent } from '../components/ui/card'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../components/ui/table'
@@ -30,7 +31,7 @@ export function AdminTags() {
       </div>
 
       {tags.isLoading ? (
-        <Loading label="Loading tags…" />
+        <TableRowsSkeleton />
       ) : tags.error ? (
         <ErrorState error={tags.error} onRetry={() => void tags.refetch()} />
       ) : (

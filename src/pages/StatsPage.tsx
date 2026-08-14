@@ -1,7 +1,8 @@
 import { Link } from 'react-router'
 import { PageHero } from '../components/Shared'
 import { useGlobalStats } from '../lib/servers'
-import { Loading, ErrorState } from '../components/Async'
+import { ErrorState } from '../components/Async'
+import { CardGridSkeleton } from '../components/Skeletons'
 
 function StatSection({ id, title, subtext, children }: { id: string; title: string; subtext?: string; children: React.ReactNode }) {
   return (
@@ -34,7 +35,7 @@ export function StatsPage() {
       />
       <div className="wrapper px-4 py-6 md:py-8 max-w-4xl">
         {stats.isLoading ? (
-          <Loading label="Loading stats…" />
+          <CardGridSkeleton count={5} className="flex flex-col gap-6 md:gap-8" />
         ) : stats.error ? (
           <ErrorState error={stats.error} onRetry={() => void stats.refetch()} />
         ) : stats.data ? (

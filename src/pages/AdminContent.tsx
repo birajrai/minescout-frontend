@@ -1,10 +1,14 @@
 import { useMemo, useState } from 'react'
-import { Search, ExternalLink, Tags } from 'lucide-react'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { Link } from 'react-router'
+import { Search, ExternalLink, Tags, Plus, Pencil, Trash2 } from 'lucide-react'
 import { useApiQuery } from '../lib/hooks'
-import { api } from '../lib/api'
+import { api, ApiError } from '../lib/api'
 import { useFacets } from '../lib/servers'
-import { Loading, ErrorState } from '../components/Async'
+import { ErrorState } from '../components/Async'
+import { TableRowsSkeleton } from '../components/Skeletons'
 import { Input } from '../components/ui/input'
+import { Button } from '../components/ui/button'
 import { Badge } from '../components/ui/badge'
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card'
 import type { BlogListResult, CmsPage } from '../lib/types'
@@ -18,6 +22,12 @@ export function AdminContent() {
   const posts = useBlogAdminList()
   const pages = useApiQuery(['cms', 'admin'], () => api.get<CmsPage[]>('/admin/pages'))
   const tags = useFacets('gamemodes')
+  const queryClient = useQueryClient()
+
+  const remove = useMutation<{ success: boolean }, ApiError, string>({
+    mutationFn: (id) => api.delete<{ success: boolean }>(`/blog/posts/${id}`),
+    onSuccess: () => void queryClient.invalidateQueries({ queryKey: ['blog', 'admin'] }),
+  })
 
   const filteredPosts = useMemo(() => {
     const query = q.trim().toLowerCase()
@@ -26,7 +36,7 @@ export function AdminContent() {
     return entries.filter((p) => p.slug.includes(query) || p.title.toLowerCase().includes(query))
   }, [q, posts.data])
 
-  if (posts.isLoading || pages.isLoading) return <Loading label="Loading content…" />
+  if (posts.isLoading || pages.isLoading) return <TableRowsSkeleton />
   if (posts.error) return <ErrorState error={posts.error} onRetry={() => void posts.refetch()} />
   if (pages.error) return <ErrorState error={pages.error} onRetry={() => void pages.refetch()} />
 
@@ -43,8 +53,11 @@ export function AdminContent() {
       </div>
 
       <Card>
-        <CardHeader className="py-4">
+        <CardHeader className="py-4 flex flex-row items-center justify-between gap-3 space-y-0">
           <CardTitle className="text-base">Blog posts ({filteredPosts.length})</CardTitle>
+          <Button asChild size="sm">
+            <Link to="/admin/content/blog/new"><Plus className="h-3.5 w-3.5" /> New post</Link>
+          </Button>
         </CardHeader>
         <CardContent className="p-0">
           <div className="flex flex-col divide-y">
@@ -55,9 +68,25 @@ export function AdminContent() {
                   <span className="font-medium text-sm break-words">{p.title}</span>
                   <span className="text-xs text-muted-foreground">{p.slug}</span>
                 </div>
-                <a href={`/blog/${p.slug}`} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-sm text-primary hover:underline shrink-0">
-                  <ExternalLink className="h-3.5 w-3.5" /> View
-                </a>
+                <div className="flex items-center gap-3 shrink-0">
+                  <a href={`/blog/${p.slug}`} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-sm text-primary hover:underline">
+                    <ExternalLink className="h-3.5 w-3.5" /> View
+                  </a>
+                  <Link to={`/admin/content/blog/${p.id}/edit`} className="inline-flex items-center gap-1 text-sm text-primary hover:underline">
+                    <Pencil className="h-3.5 w-3.5" /> Edit
+                  </Link>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="text-destructive hover:text-destructive"
+                    onClick={() => {
+                      if (window.confirm(`Delete "${p.title}"?`)) remove.mutate(p.id)
+                    }}
+                    disabled={remove.isPending}
+                  >
+                    <Trash2 className="h-3.5 w-3.5" /> Delete
+                  </Button>
+                </div>
               </div>
             ))}
           </div>

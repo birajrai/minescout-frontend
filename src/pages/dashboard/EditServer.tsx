@@ -4,7 +4,8 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { api, errorMessage, ApiError } from '../../lib/api'
 import { useServer } from '../../lib/servers'
 import { queryKeys } from '../../lib/queryKeys'
-import { Loading, ErrorState } from '../../components/Async'
+import { ErrorState } from '../../components/Async'
+import { ContentSkeleton } from '../../components/Skeletons'
 import { ImageField } from '../../components/ImageField'
 
 const inputCls =
@@ -45,7 +46,7 @@ export function EditServer({ votifier = false }: { votifier?: boolean }) {
     },
   })
 
-  if (serverQuery.isLoading) return <Loading label="Loading server…" />
+  if (serverQuery.isLoading) return <ContentSkeleton />
   if (serverQuery.error) return <ErrorState error={serverQuery.error} onRetry={() => void serverQuery.refetch()} />
   if (!server) return null
 

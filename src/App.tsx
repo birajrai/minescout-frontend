@@ -1,5 +1,5 @@
 import { lazy } from 'react'
-import { Routes, Route } from 'react-router'
+import { Routes, Route, Navigate, useParams } from 'react-router'
 import { RootLayout } from './layouts/RootLayout'
 import { RequireAuth } from './lib/auth'
 import { DashboardLayout } from './pages/DashboardLayout'
@@ -28,6 +28,7 @@ import { AdminOverview } from './pages/AdminOverview'
 import { AdminServers } from './pages/AdminServers'
 import { AdminModeration } from './pages/AdminModeration'
 import { AdminContent } from './pages/AdminContent'
+import { BlogEditor } from './pages/BlogEditor'
 import { AdminTags } from './pages/AdminTags'
 import { AdminChest } from './pages/AdminChest'
 import { NotFound } from './pages/NotFound'
@@ -47,6 +48,24 @@ const BlogPost = lazy(() => import('./pages/Blog').then((m) => ({ default: m.Blo
 const StatsPage = lazy(() => import('./pages/StatsPage').then((m) => ({ default: m.StatsPage })))
 const LoginPage = lazy(() => import('./pages/LoginPage').then((m) => ({ default: m.LoginPage })))
 const RegisterPage = lazy(() => import('./pages/RegisterPage').then((m) => ({ default: m.RegisterPage })))
+
+const MIGRATED_PAGE_SLUGS = new Set([
+  'how-to-get-more-players-on-a-minecraft-server',
+  'how-to-join-a-minecraft-server',
+  'how-to-make-a-minecraft-server',
+  'how-to-make-a-modded-minecraft-server',
+  'how-to-make-a-blast-furnace-in-minecraft',
+  'how-to-make-an-armor-stand-in-minecraft',
+  'how-to-tame-a-fox-in-minecraft',
+  'best-minecraft-servers-2026',
+  'minelist-the-best-minecraft-server-list-script',
+])
+
+function RedirectingContent() {
+  const { slug } = useParams()
+  if (slug && MIGRATED_PAGE_SLUGS.has(slug)) return <Navigate to={`/blog/${slug}`} replace />
+  return <ContentPage />
+}
 
 function App() {
   return (
@@ -68,7 +87,7 @@ function App() {
         <Route path="tags" element={<Tags />} />
         <Route path="tag/:slug" element={<ServerList />} />
         <Route path="search" element={<SearchPage />} />
-        <Route path="pages/:slug" element={<ContentPage />} />
+        <Route path="pages/:slug" element={<RedirectingContent />} />
         <Route path="pages/server-status-checker" element={<ToolsPage tool="status" />} />
         <Route path="pages/votifier-tester" element={<ToolsPage tool="votifier" />} />
         <Route path="pages/motd-generator" element={<MotdGenerator />} />
@@ -116,6 +135,8 @@ function App() {
           <Route path="moderation" element={<AdminModeration />} />
           <Route path="ads" element={<AdminAds />} />
           <Route path="content" element={<AdminContent />} />
+          <Route path="content/blog/new" element={<BlogEditor />} />
+          <Route path="content/blog/:id/edit" element={<BlogEditor />} />
           <Route path="tags" element={<AdminTags />} />
           <Route path="chest" element={<AdminChest />} />
           <Route path="users" element={<AdminUsers />} />

@@ -1,5 +1,6 @@
 import { useAdminTransactions, useAdminSetTxStatus, useAdminBillingSweep, formatMoney } from '../lib/billing'
-import { Loading, ErrorState } from '../components/Async'
+import { ErrorState } from '../components/Async'
+import { TableRowsSkeleton } from '../components/Skeletons'
 import { Button } from '../components/ui/button'
 import { Badge } from '../components/ui/badge'
 import { Card, CardContent } from '../components/ui/card'
@@ -18,7 +19,7 @@ export function AdminBilling() {
   const setStatus = useAdminSetTxStatus()
   const sweep = useAdminBillingSweep()
 
-  if (list.isLoading) return <Loading label="Loading transactions…" />
+  if (list.isLoading) return <TableRowsSkeleton />
   if (list.error) return <ErrorState error={list.error} onRetry={() => void list.refetch()} />
 
   const txs = list.data ?? []

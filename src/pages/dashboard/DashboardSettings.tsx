@@ -4,7 +4,7 @@ import { api, errorMessage, ApiError } from '../../lib/api'
 import { useApiQuery } from '../../lib/hooks'
 import { queryKeys } from '../../lib/queryKeys'
 import { useAuth } from '../../lib/auth'
-import { Loading } from '../../components/Async'
+import { ContentSkeleton } from '../../components/Skeletons'
 
 export function DashboardSettings() {
   const { isAdmin } = useAuth()
@@ -23,7 +23,7 @@ export function DashboardSettings() {
     },
   })
 
-  if (settings.isLoading) return <Loading label="Loading settings…" />
+  if (settings.isLoading) return <ContentSkeleton />
 
   return (
     <div className="flex flex-col gap-4 max-w-2xl">

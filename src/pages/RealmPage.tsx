@@ -2,7 +2,8 @@ import { useParams, Link } from 'react-router'
 import { MapPin, Globe } from 'lucide-react'
 import { PageHero } from '../components/Shared'
 import { useRealm } from '../lib/realms'
-import { Loading, ErrorState } from '../components/Async'
+import { ErrorState } from '../components/Async'
+import { ContentSkeleton } from '../components/Skeletons'
 import { ApiError } from '../lib/api'
 import { NotFound } from './NotFound'
 
@@ -10,7 +11,7 @@ export function RealmPage() {
   const { code } = useParams()
   const query = useRealm(code ?? '')
 
-  if (query.isLoading) return <Loading label="Loading realm…" />
+  if (query.isLoading) return <ContentSkeleton />
   if (query.error) {
     if ((query.error as ApiError).status === 404) return <NotFound />
     return <ErrorState error={query.error} onRetry={() => void query.refetch()} />

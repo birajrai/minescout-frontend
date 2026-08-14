@@ -6,7 +6,8 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { api, errorMessage, ApiError } from '../lib/api'
 import { useServerReviews } from '../lib/servers'
 import { queryKeys } from '../lib/queryKeys'
-import { Loading, ErrorState } from '../components/Async'
+import { ErrorState } from '../components/Async'
+import { ContentSkeleton } from '../components/Skeletons'
 import type { Server, Review } from '../lib/types'
 
 function ReviewForm({ slug }: { slug: string }) {
@@ -86,7 +87,7 @@ export function ServerReviews() {
         </Link>
       </div>
       {reviews.isLoading ? (
-        <Loading label="Loading reviews…" />
+        <ContentSkeleton />
       ) : reviews.error ? (
         <ErrorState error={reviews.error} onRetry={() => void reviews.refetch()} />
       ) : (reviews.data ?? []).length === 0 ? (

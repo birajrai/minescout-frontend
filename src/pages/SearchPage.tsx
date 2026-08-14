@@ -4,7 +4,8 @@ import { Search } from 'lucide-react'
 import { PageHero } from '../components/Shared'
 import { ListingCard } from '../components/ListingCard'
 import { useServers, useFacets } from '../lib/servers'
-import { Loading, ErrorState } from '../components/Async'
+import { ErrorState } from '../components/Async'
+import { ListingCardSkeleton } from '../components/Skeletons'
 import type { ServerSort } from '../lib/types'
 
 const SORT_API: Record<string, ServerSort> = {
@@ -118,7 +119,7 @@ export function SearchPage() {
           </form>
         </section>
         {listQuery.isLoading ? (
-          <Loading label="Searching…" />
+          <div className="flex flex-col gap-3">{Array.from({ length: 3 }).map((_, i) => <ListingCardSkeleton key={i} />)}</div>
         ) : listQuery.error ? (
           <ErrorState error={listQuery.error} onRetry={() => void listQuery.refetch()} />
         ) : (

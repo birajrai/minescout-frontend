@@ -111,7 +111,7 @@ export function Navbar() {
       {/* Mobile bar */}
       <div className="flex lg:hidden w-full items-center justify-between bg-stone-200 dark:bg-stone-900 border-b border-stone-300 dark:border-stone-700 px-3 py-2.5">
         <Link to="/" className="inline-block h-8 flex items-center">
-          <img src="/brand/mine_list_logo.webp" alt="Minescout logo" className="h-8 w-auto max-w-[140px] object-contain object-left" width="140" height="32" decoding="async" />
+          <img src="/brand/minescout-logo.png" alt="Minescout logo" className="h-8 w-auto max-w-[140px] object-contain object-left" width="140" height="32" decoding="async" />
         </Link>
         <div className="flex items-center gap-2">
           <button type="button" id="mobile-search-trigger" onClick={() => setSearchOpen(true)} className="inline-flex items-center justify-center h-9 w-9 rounded-sm font-bold text-sm border-y-4 border-transparent hover:bg-stone-400/50 dark:hover:bg-stone-700/50 focus:outline-none focus-visible:ring-2 focus-visible:ring-stone-500 focus-visible:ring-offset-2 border-none active:bg-stone-400/30 dark:active:bg-stone-700/30 cursor-pointer" aria-label="Search">
@@ -202,12 +202,12 @@ export function Navbar() {
             <div className="flex flex-col gap-1">
               <span className="font-minecraft text-sm">Tools</span>
               <a href="/pages/server-status-checker" className="text-sm hover:underline py-1">Server Checker</a>
-              <a href="/pages/how-to-make-a-minecraft-server" className="text-sm hover:underline py-1">How to make a server</a>
+              <a href="/blog/how-to-make-a-minecraft-server" className="text-sm hover:underline py-1">How to make a server</a>
               <a href="/pages/free-minecraft-hosting" className="text-sm hover:underline py-1">Free Minecraft hosting</a>
-              <a href="/pages/how-to-join-a-minecraft-server" className="text-sm hover:underline py-1">How to join</a>
+              <a href="/blog/how-to-join-a-minecraft-server" className="text-sm hover:underline py-1">How to join</a>
               <a href="/pages/votifier-tester" className="text-sm hover:underline py-1">Votifier Test</a>
               <a href="/pages/motd-generator" className="text-sm hover:underline py-1">MOTD Generator</a>
-              <a href="https://gamingbanners.com/animated-banners?aff=minelist" target="_blank" className="text-sm hover:underline py-1">Banner Maker</a>
+              <a href="https://gamingbanners.com/animated-banners?aff=minescout" target="_blank" className="text-sm hover:underline py-1">Banner Maker</a>
               <a href="/stats" className="text-sm hover:underline py-1">Minescout Statistics</a>
             </div>
           </div>
@@ -230,7 +230,7 @@ export function Navbar() {
           <div className="flex items-center gap-2 xl:gap-8 min-w-0 flex-1">
             <div className="shrink-0">
               <Link to="/" id="logo" className="inline-block h-9 flex items-center">
-                <img src="/brand/mine_list_logo.webp" alt="Minescout logo" className="h-9 w-auto max-w-[160px] object-contain object-left" width="160" height="36" decoding="async" />
+                <img src="/brand/minescout-logo.png" alt="Minescout logo" className="h-9 w-auto max-w-[160px] object-contain object-left" width="160" height="36" decoding="async" />
               </Link>
             </div>
             <nav aria-label="Main" className="flex-1 hidden md:flex items-center justify-between">
@@ -416,10 +416,10 @@ export function Navbar() {
             <div className="wrapper border-t border-stone-300 dark:border-stone-700 py-3 px-4">
               <p className="text-center text-xs font-minecraft text-stone-600 dark:text-stone-400 mb-2">Guides</p>
               <div className="flex flex-wrap justify-center gap-x-4 gap-y-2 text-sm">
-                <a href="/pages/how-to-make-a-minecraft-server" className="text-primary hover:underline font-medium">How to make a server</a>
+                <a href="/blog/how-to-make-a-minecraft-server" className="text-primary hover:underline font-medium">How to make a server</a>
                 <a href="/pages/free-minecraft-hosting" className="text-primary hover:underline font-medium">Free hosting</a>
-                <a href="/pages/how-to-join-a-minecraft-server" className="text-primary hover:underline font-medium">How to join</a>
-                <a href="/pages/how-to-make-a-modded-minecraft-server" className="text-primary hover:underline font-medium">Modded server</a>
+                <a href="/blog/how-to-join-a-minecraft-server" className="text-primary hover:underline font-medium">How to join</a>
+                <a href="/blog/how-to-make-a-modded-minecraft-server" className="text-primary hover:underline font-medium">Modded server</a>
                 <a href="/pages/are-minecraft-servers-down" className="text-primary hover:underline font-medium">Minecraft down?</a>
               </div>
             </div>
@@ -458,7 +458,7 @@ export function Navbar() {
                 </a>
               </div>
               <div className="col-span-1 flex flex-col gap-3 p-4">
-                <a href="https://gamingbanners.com/animated-banners?aff=minelist" target="_blank" className="nav-tools-card flex flex-col gap-1 rounded-sm text-sm transition-all outline-none focus-visible:ring-2 focus-visible:ring-stone-500/50 h-full p-4 group hover:bg-stone-300/30 dark:hover:bg-stone-800/30">
+                <a href="https://gamingbanners.com/animated-banners?aff=minescout" target="_blank" className="nav-tools-card flex flex-col gap-1 rounded-sm text-sm transition-all outline-none focus-visible:ring-2 focus-visible:ring-stone-500/50 h-full p-4 group hover:bg-stone-300/30 dark:hover:bg-stone-800/30">
                   <div className="aspect-square w-full rounded-sm border border-stone-400 dark:border-stone-600 bg-stone-300 dark:bg-stone-800 mb-2 flex items-center justify-center text-stone-500 dark:text-stone-400 text-xs font-minecraft pointer-events-none select-none">Banner</div>
                   <div className="flex items-center gap-2">
                     <h3 className="font-semibold">Minecraft Banner Maker</h3>
@@ -471,10 +471,10 @@ export function Navbar() {
             <div className="wrapper border-t border-stone-300 dark:border-stone-700 py-3 px-4">
               <p className="text-center text-xs font-minecraft text-stone-600 dark:text-stone-400 mb-2">Guides</p>
               <div className="flex flex-wrap justify-center gap-x-4 gap-y-2 text-sm">
-                <a href="/pages/how-to-make-a-minecraft-server" className="text-primary hover:underline font-medium">How to make a server</a>
+                <a href="/blog/how-to-make-a-minecraft-server" className="text-primary hover:underline font-medium">How to make a server</a>
                 <a href="/pages/free-minecraft-hosting" className="text-primary hover:underline font-medium">Free hosting</a>
-                <a href="/pages/how-to-join-a-minecraft-server" className="text-primary hover:underline font-medium">How to join</a>
-                <a href="/pages/how-to-make-a-modded-minecraft-server" className="text-primary hover:underline font-medium">Modded server</a>
+                <a href="/blog/how-to-join-a-minecraft-server" className="text-primary hover:underline font-medium">How to join</a>
+                <a href="/blog/how-to-make-a-modded-minecraft-server" className="text-primary hover:underline font-medium">Modded server</a>
                 <a href="/pages/are-minecraft-servers-down" className="text-primary hover:underline font-medium">Minecraft down?</a>
               </div>
             </div>

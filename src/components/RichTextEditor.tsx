@@ -2,6 +2,7 @@ import { EditorContent, useEditor, type Editor } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import Link from '@tiptap/extension-link'
 import Placeholder from '@tiptap/extension-placeholder'
+import { Markdown } from '@tiptap/markdown'
 import {
   Bold,
   Italic,
@@ -68,7 +69,7 @@ export function RichTextEditor({
   maxLength = 10000,
 }: {
   value: string
-  onChange: (html: string) => void
+  onChange: (markdown: string) => void
   placeholder?: string
   minHeight?: string
   maxLength?: number
@@ -76,20 +77,23 @@ export function RichTextEditor({
   const editor = useEditor({
     extensions: [
       StarterKit,
+      Markdown,
       Link.configure({ openOnClick: false }),
       Placeholder.configure({ placeholder: placeholder ?? 'Write a rich description…' }),
     ],
-    content: value,
     editorProps: {
       attributes: {
         class:
           'prose prose-stone dark:prose-invert max-w-none text-sm text-stone-800 dark:text-stone-200 focus:outline-none min-h-full px-3 py-2',
       },
     },
+    onCreate: ({ editor }) => {
+      if (value) editor.commands.setContent(value, { contentType: 'markdown' })
+    },
     onUpdate: ({ editor: e }) => {
-      const html = e.getHTML()
-      if (html.length <= maxLength) {
-        onChange(html)
+      const markdown = e.getMarkdown()
+      if (markdown.length <= maxLength) {
+        onChange(markdown)
       } else {
         e.chain().undo().run()
       }

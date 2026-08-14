@@ -2,14 +2,15 @@ import { Link } from 'react-router'
 import { ExternalLink, Plus, Pencil, Server as ServerIcon } from 'lucide-react'
 import { useMyServers } from '../../lib/servers'
 import { useGlobalStats } from '../../lib/servers'
-import { Loading, ErrorState } from '../../components/Async'
+import { ErrorState } from '../../components/Async'
+import { ContentSkeleton } from '../../components/Skeletons'
 import type { Server } from '../../lib/types'
 
 export function DashboardHome() {
   const myServers = useMyServers()
   const stats = useGlobalStats()
 
-  if (myServers.isLoading) return <Loading label="Loading your servers…" />
+  if (myServers.isLoading) return <ContentSkeleton />
   if (myServers.error) return <ErrorState error={myServers.error} onRetry={() => void myServers.refetch()} />
 
   const servers = myServers.data ?? []

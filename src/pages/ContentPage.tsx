@@ -1,7 +1,8 @@
 import { useParams } from 'react-router'
 import { PageHero } from '../components/Shared'
 import { useCmsPage, Markdown } from '../lib/cms'
-import { Loading, ErrorState } from '../components/Async'
+import { ErrorState } from '../components/Async'
+import { ContentSkeleton } from '../components/Skeletons'
 import { ApiError } from '../lib/api'
 import { NotFound } from './NotFound'
 
@@ -10,7 +11,7 @@ export function ContentPage({ slug: fixedSlug }: { slug?: string }) {
   const slug = fixedSlug ?? params.slug
   const query = useCmsPage(slug ?? '')
 
-  if (query.isLoading) return <Loading label="Loading page…" />
+  if (query.isLoading) return <ContentSkeleton />
   if (query.error) {
     if ((query.error as ApiError).status === 404) return <NotFound />
     return <ErrorState error={query.error} onRetry={() => void query.refetch()} />

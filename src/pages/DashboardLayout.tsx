@@ -28,8 +28,8 @@ export function DashboardLayout() {
             muted
             playsInline
             preload="metadata"
-            src="/brand/minelist_banner.webm?v=1786293318"
-            poster="/brand/minelist_banner_poster.webp?v=1786293318"
+            src="/brand/minescout_banner.webm?v=1786293318"
+            poster="/brand/minescout_banner_poster.webp?v=1786293318"
           />
           <div className="md:hidden min-h-[150px] flex-shrink-0 bg-stone-800/95 dark:bg-stone-950/95" aria-hidden="true" />
           <div className="flex flex-col w-full h-full p-4 absolute top-0 left-0 gap-2 items-center justify-center bg-stone-800/60 dark:bg-stone-950/60 backdrop-blur-xl md:backdrop-blur-[4px] min-h-[150px] md:min-h-0">

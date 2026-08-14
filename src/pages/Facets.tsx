@@ -2,7 +2,8 @@ import { useMemo, useState } from 'react'
 import { Link } from 'react-router'
 import { PageHero } from '../components/Shared'
 import { useFacets } from '../lib/servers'
-import { Loading, ErrorState } from '../components/Async'
+import { ErrorState } from '../components/Async'
+import { CardGridSkeleton } from '../components/Skeletons'
 
 function SearchBox({ q, setQ, placeholder }: { q: string; setQ: (v: string) => void; placeholder: string }) {
   return (
@@ -65,7 +66,7 @@ export function GameModes() {
       <div className="flex flex-col gap-4 min-h-screen wrapper px-3 xl:px-0 py-6">
         <SearchBox q={q} setQ={setQ} placeholder={'Search Gamemodes, eg. "Skyblock"'} />
         {isLoading ? (
-          <Loading label="Loading game modes…" />
+          <CardGridSkeleton count={10} className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 w-full" />
         ) : error ? (
           <ErrorState error={error} onRetry={() => void refetch()} />
         ) : (
@@ -100,7 +101,7 @@ export function Versions() {
       <div className="flex flex-col gap-4 min-h-screen wrapper px-3 xl:px-0 py-6">
         <SearchBox q={q} setQ={setQ} placeholder="Search versions..." />
         {isLoading ? (
-          <Loading label="Loading versions…" />
+          <CardGridSkeleton count={6} className="grid grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-2" />
         ) : error ? (
           <ErrorState error={error} onRetry={() => void refetch()} />
         ) : (
@@ -139,7 +140,7 @@ export function Countries() {
       <div className="flex flex-col gap-4 min-h-screen wrapper px-3 xl:px-0 py-6">
         <SearchBox q={q} setQ={setQ} placeholder="Search countries..." />
         {isLoading ? (
-          <Loading label="Loading countries…" />
+          <CardGridSkeleton count={6} className="grid grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-2" />
         ) : error ? (
           <ErrorState error={error} onRetry={() => void refetch()} />
         ) : (
@@ -170,7 +171,7 @@ export function Tags() {
       />
       <div className="wrapper px-3 xl:px-0 py-6 flex flex-col gap-6">
         {isLoading ? (
-          <Loading label="Loading tags…" />
+          <CardGridSkeleton count={8} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2" />
         ) : error ? (
           <ErrorState error={error} onRetry={() => void refetch()} />
         ) : (

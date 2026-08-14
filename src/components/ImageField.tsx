@@ -23,7 +23,7 @@ export function ImageField({ label, value, onChange, kind, hint }: {
     mutationFn: ({ kind, filename, dataUrl }) => api.post<UploadedImage>('/upload', { kind, filename, dataUrl }),
     onSuccess: (d) => {
       onChange(d.publicUrl)
-      setStatus('Uploaded — link filled in below.')
+      setStatus(hint ? 'Uploaded — link filled in below.' : 'Uploaded — converted to AVIF.')
       if (inputRef.current) inputRef.current.value = ''
     },
     onError: (e) => setStatus(errorMessage(e)),

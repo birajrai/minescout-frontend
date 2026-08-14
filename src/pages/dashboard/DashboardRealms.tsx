@@ -4,7 +4,7 @@ import { Trash2, ExternalLink } from 'lucide-react'
 import { api, errorMessage, ApiError } from '../../lib/api'
 import { useRealms } from '../../lib/realms'
 import { useAuth } from '../../lib/auth'
-import { Loading } from '../../components/Async'
+import { ContentSkeleton } from '../../components/Skeletons'
 
 const inputCls =
   'h-10 px-3 rounded-sm border-2 border-stone-400 dark:border-stone-600 bg-stone-100 dark:bg-stone-800 text-sm text-stone-900 dark:text-stone-100 focus:outline-none focus:ring-2 focus:ring-primary'
@@ -59,7 +59,7 @@ export function DashboardRealms() {
     create.mutate()
   }
 
-  if (list.isLoading) return <Loading label="Loading realms…" />
+  if (list.isLoading) return <ContentSkeleton />
 
   return (
     <div className="flex flex-col gap-4">

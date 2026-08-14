@@ -4,7 +4,8 @@ import { Check, Crown, ExternalLink } from 'lucide-react'
 import { useMyBilling, useCheckout, formatMoney } from '../../lib/billing'
 import { useMyServers } from '../../lib/servers'
 import { errorMessage } from '../../lib/api'
-import { Loading, ErrorState } from '../../components/Async'
+import { ErrorState } from '../../components/Async'
+import { ContentSkeleton } from '../../components/Skeletons'
 import type { GatewayId } from '../../lib/types'
 
 const inputCls =
@@ -66,9 +67,9 @@ export function ProSubscriptionsPage() {
     )
   }
 
-  if (billing.isLoading) return <Loading label="Loading billing…" />
+  if (billing.isLoading) return <ContentSkeleton />
   if (billing.error) return <ErrorState error={billing.error} onRetry={() => void billing.refetch()} />
-  if (myServers.isLoading) return <Loading label="Loading servers…" />
+  if (myServers.isLoading) return <ContentSkeleton />
 
   const statusBadge =
     sub === null ? (

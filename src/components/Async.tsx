@@ -1,15 +1,6 @@
 import { AlertTriangle, RefreshCw } from 'lucide-react'
 import { ApiError, errorMessage } from '../lib/api'
 
-export function Loading({ label = 'Loading…' }: { label?: string }) {
-  return (
-    <div className="flex flex-col gap-3 items-center justify-center py-16 text-stone-500 dark:text-stone-400">
-      <div className="size-8 animate-spin rounded-full border-2 border-stone-400 dark:border-stone-600 border-t-transparent" aria-hidden="true" />
-      <p className="text-sm">{label}</p>
-    </div>
-  )
-}
-
 export function ErrorState({ error, onRetry }: { error: ApiError; onRetry?: () => void }) {
   return (
     <div className="flex flex-col gap-3 items-center justify-center py-16 px-4 text-center">

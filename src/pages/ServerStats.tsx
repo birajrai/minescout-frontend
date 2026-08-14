@@ -1,6 +1,7 @@
 import { useOutletContext, Link } from 'react-router'
 import { useServerHistory, useServerRankHistory } from '../lib/servers'
-import { Loading, ErrorState } from '../components/Async'
+import { ErrorState } from '../components/Async'
+import { TableRowsSkeleton } from '../components/Skeletons'
 import type { Server } from '../lib/types'
 
 export function ServerStats() {
@@ -50,7 +51,7 @@ export function ServerStats() {
       <section className="flex flex-col gap-3">
         <h2 className="font-minecraft text-lg md:text-xl text-stone-800 dark:text-stone-200">Player history (last 48 checks)</h2>
         {history.isLoading ? (
-          <Loading label="Loading history…" />
+          <TableRowsSkeleton />
         ) : history.error ? (
           <ErrorState error={history.error} onRetry={() => void history.refetch()} />
         ) : history.data && history.data.length > 0 ? (
@@ -82,7 +83,7 @@ export function ServerStats() {
       <section className="flex flex-col gap-3">
         <h2 className="font-minecraft text-lg md:text-xl text-stone-800 dark:text-stone-200">Rank history (last 7 days)</h2>
         {rank.isLoading ? (
-          <Loading label="Loading rank…" />
+          <TableRowsSkeleton />
         ) : rank.error ? (
           <ErrorState error={rank.error} onRetry={() => void rank.refetch()} />
         ) : rank.data && rank.data.length > 0 ? (

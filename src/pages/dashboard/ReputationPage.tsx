@@ -1,7 +1,8 @@
 import { Link } from 'react-router'
 import { MessageSquare, Vote, Star } from 'lucide-react'
 import { useMyReputation } from '../../lib/billing'
-import { Loading, ErrorState } from '../../components/Async'
+import { ErrorState } from '../../components/Async'
+import { ContentSkeleton } from '../../components/Skeletons'
 
 function Stars({ rating }: { rating: number }) {
   return (
@@ -16,7 +17,7 @@ function Stars({ rating }: { rating: number }) {
 export function ReputationPage() {
   const q = useMyReputation()
 
-  if (q.isLoading) return <Loading label="Loading your reputation…" />
+  if (q.isLoading) return <ContentSkeleton />
   if (q.error) return <ErrorState error={q.error} onRetry={() => void q.refetch()} />
 
   const rep = q.data!
