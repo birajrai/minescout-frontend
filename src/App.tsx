@@ -95,7 +95,7 @@ function App() {
         <Route path="sponsored-slots" element={<ContentPage slug="sponsored-slots" />} />
         <Route path="pro-pricing" element={<ContentPage slug="pro-pricing" />} />
         <Route path="realms" element={<ContentPage slug="realms" />} />
-        <Route path="how-to-get-more-players-on-a-minecraft-server" element={<ContentPage slug="how-to-get-more-players-on-a-minecraft-server" />} />
+        <Route path="how-to-get-more-players-on-a-minecraft-server" element={<Navigate to="/blog/how-to-get-more-players-on-a-minecraft-server" replace />} />
         <Route path="blog" element={<BlogIndex />} />
         <Route path="blog/:slug" element={<BlogPost />} />
         <Route path="stats" element={<StatsPage />} />
