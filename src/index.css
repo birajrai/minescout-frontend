@@ -1,0 +1,19 @@
+/* Minescout — minelist-parity frontend.
+ * Base + reset + utilities are served by the minelist compiled CSS loaded in
+ * index.html (/assets/css/tailwind.css + /assets/css/main.min.css).
+ * This file only adds small compatibility aliases for classes used by
+ * secondary pages that are not part of the minelist utility set. */
+
+.font-minecraft-ten {
+  font-family: var(--font-minecraft-ten);
+}
+
+/* shim: accent tokens for legacy components */
+.bg-card { background-color: #fff; }
+.dark .bg-card { background-color: #1c1917; }
+.text-foreground { color: #1c1917; }
+.dark .text-foreground { color: #fafaf9; }
+.text-muted-foreground { color: var(--color-muted-foreground, #78716c); }
+.border-border { border-color: var(--color-border, rgba(0,0,0,.1)); }
+.bg-destructive { background-color: var(--color-destructive, #dc2626); }
+.text-destructive { color: var(--color-destructive, #dc2626); }

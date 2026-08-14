@@ -1,0 +1,25 @@
+import type { ServerListParams } from './types'
+
+export const queryKeys = {
+  servers: ['servers'] as const,
+  serverList: (params: ServerListParams) => ['servers', params] as const,
+  server: (slug: string) => ['server', slug] as const,
+  serverHistory: (slug: string) => ['server-history', slug] as const,
+  serverRankHistory: (slug: string) => ['server-rank-history', slug] as const,
+  serverReviews: (slug: string) => ['reviews', slug] as const,
+  serverVoteCheck: (slug: string, username: string) => ['vote-check', slug, username] as const,
+  facets: (kind: 'gamemodes' | 'versions' | 'countries') => ['facets', kind] as const,
+  stats: ['stats'] as const,
+  blog: (params?: { page?: number; tag?: string }) => ['blog', params] as const,
+  blogPost: (slug: string) => ['blog-post', slug] as const,
+  cmsPage: (slug: string) => ['cms', slug] as const,
+  saved: ['saved'] as const,
+  authMe: ['auth', 'me'] as const,
+  meServers: ['me', 'servers'] as const,
+  me: ['me'] as const,
+  ads: (slot?: string) => ['ads', slot] as const,
+  settings: ['settings'] as const,
+  realms: (params?: Record<string, string | number | undefined>) => ['realms', params] as const,
+  realm: (code: string) => ['realm', code] as const,
+  placements: (params?: { type?: string; gamemode?: string }) => ['placements', params] as const,
+}
