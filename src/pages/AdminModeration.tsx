@@ -4,18 +4,24 @@ import { ExternalLink, ShieldX, Trash2, Check, UserCheck, ShieldAlert } from 'lu
 import { api, errorMessage, ApiError } from '../lib/api'
 import { useAdminClaims, useAdminReports } from '../lib/admin-api'
 import { Loading } from '../components/Async'
+import { Button } from '../components/ui/button'
+import { Badge } from '../components/ui/badge'
+import { Checkbox } from '../components/ui/checkbox'
+import { Card, CardContent } from '../components/ui/card'
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../components/ui/table'
+import { cn } from '../lib/utils'
 import type { AdminClaim, AdminReport } from '../lib/admin-api'
 
-const CLAIM_BADGE: Record<AdminClaim['status'], { label: string; className: string }> = {
-  pending: { label: 'Pending', className: 'bg-amber-500/20 text-amber-700 dark:text-amber-400' },
-  approved: { label: 'Approved', className: 'bg-green-500/20 text-green-700 dark:text-green-400' },
-  denied: { label: 'Denied', className: 'bg-red-500/20 text-red-700 dark:text-red-400' },
+const CLAIM_BADGE: Record<AdminClaim['status'], 'warning' | 'success' | 'destructive'> = {
+  pending: 'warning',
+  approved: 'success',
+  denied: 'destructive',
 }
 
-const REPORT_BADGE: Record<AdminReport['status'], { label: string; className: string }> = {
-  open: { label: 'Open', className: 'bg-red-500/20 text-red-700 dark:text-red-400' },
-  resolved: { label: 'Resolved', className: 'bg-green-500/20 text-green-700 dark:text-green-400' },
-  dismissed: { label: 'Dismissed', className: 'bg-stone-400/20 text-stone-600 dark:text-stone-400' },
+const REPORT_BADGE: Record<AdminReport['status'], 'destructive' | 'success' | 'muted'> = {
+  open: 'destructive',
+  resolved: 'success',
+  dismissed: 'muted',
 }
 
 function fmtDate(iso: string) {
@@ -50,158 +56,155 @@ export function AdminModeration() {
   const openReports = (reports.data ?? []).filter((r) => r.status === 'open')
   const visibleReports = showResolved ? reports.data ?? [] : openReports
 
+  const tabBtn = (id: 'claims' | 'reports', label: string, icon: React.ReactNode, count: number) => (
+    <button
+      type="button"
+      onClick={() => setTab(id)}
+      className={cn(
+        'inline-flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors',
+        tab === id ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground'
+      )}
+    >
+      {icon}
+      {label}
+      {count > 0 && <Badge variant="destructive" className="px-1.5">{count}</Badge>}
+    </button>
+  )
+
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-6">
+      <div className="flex flex-col gap-1">
+        <h1 className="text-2xl font-semibold tracking-tight">Moderation</h1>
+        <p className="text-sm text-muted-foreground">Approve ownership claims and handle reports.</p>
+      </div>
+
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <div className="flex items-center gap-2">
-          <button
-            type="button"
-            onClick={() => setTab('claims')}
-            className={`inline-flex items-center gap-2 px-3 py-2 rounded-sm text-sm font-bold transition-colors ${
-              tab === 'claims' ? 'bg-primary text-stone-900' : 'bg-stone-200 dark:bg-stone-700 text-stone-700 dark:text-stone-300 hover:bg-stone-300/70 dark:hover:bg-stone-600/70'
-            }`}
-          >
-            <UserCheck className="size-4" />
-            Claims
-            {openClaims.length > 0 && <span className="rounded-sm bg-red-600 text-white px-1.5 text-xs">{openClaims.length}</span>}
-          </button>
-          <button
-            type="button"
-            onClick={() => setTab('reports')}
-            className={`inline-flex items-center gap-2 px-3 py-2 rounded-sm text-sm font-bold transition-colors ${
-              tab === 'reports' ? 'bg-primary text-stone-900' : 'bg-stone-200 dark:bg-stone-700 text-stone-700 dark:text-stone-300 hover:bg-stone-300/70 dark:hover:bg-stone-600/70'
-            }`}
-          >
-            <ShieldAlert className="size-4" />
-            Reports
-            {openReports.length > 0 && <span className="rounded-sm bg-red-600 text-white px-1.5 text-xs">{openReports.length}</span>}
-          </button>
+        <div className="flex items-center gap-1 rounded-md border bg-muted/40 p-1">
+          {tabBtn('claims', 'Claims', <UserCheck className="h-4 w-4" />, openClaims.length)}
+          {tabBtn('reports', 'Reports', <ShieldAlert className="h-4 w-4" />, openReports.length)}
         </div>
-        <label className="inline-flex items-center gap-2 text-sm text-stone-600 dark:text-stone-400">
-          <input type="checkbox" checked={showResolved} onChange={(e) => setShowResolved(e.target.checked)} className="size-4 accent-primary" />
+        <label className="flex items-center gap-2 text-sm text-muted-foreground">
+          <Checkbox checked={showResolved} onCheckedChange={(v) => setShowResolved(v === true)} />
           Show resolved
         </label>
       </div>
 
-      {error && <p className="rounded-sm border border-red-600/40 bg-red-500/10 px-3 py-2 text-sm text-red-700 dark:text-red-400">{errorMessage(error)}</p>}
+      {error && <p className="rounded-md border border-destructive/40 bg-destructive/10 px-3 py-2 text-sm text-destructive">{errorMessage(error)}</p>}
 
       {claims.isLoading || reports.isLoading ? (
         <Loading label="Loading moderation queue…" />
-      ) : tab === 'claims' ? (
-        visibleClaims.length === 0 ? (
-          <div className="rounded-sm border border-stone-400/60 dark:border-stone-600 bg-stone-200/50 dark:bg-stone-800/50 p-8 text-center text-sm text-stone-500 dark:text-stone-400">No {showResolved ? '' : 'pending '}claims.</div>
-        ) : (
-          <div className="rounded-sm border border-stone-400/60 dark:border-stone-600 overflow-x-auto">
-            <table className="w-full text-sm caption-bottom">
-              <thead>
-                <tr className="border-b border-stone-400/60 dark:border-stone-600 bg-stone-200/70 dark:bg-stone-700/50 text-left">
-                  <th className="p-3 font-bold">Server</th>
-                  <th className="p-3 font-bold">Claimant</th>
-                  <th className="p-3 font-bold">Date</th>
-                  <th className="p-3 font-bold">Status</th>
-                  <th className="p-3 font-bold w-full">Actions</th>
-                </tr>
-              </thead>
-              <tbody className="[&_tr:last-child]:border-0">
-                {visibleClaims.map((c) => (
-                  <tr key={c.id} className="border-b border-stone-400/40 dark:border-stone-700 align-top">
-                    <td className="p-3 whitespace-nowrap">
-                      <div className="flex items-center gap-2">
-                        <a href={`/${c.serverSlug}`} target="_blank" rel="noreferrer" className="font-minecraft text-sm text-stone-900 dark:text-stone-100 hover:text-primary inline-flex items-center gap-1">
-                          {c.serverName} <ExternalLink className="size-3" />
-                        </a>
-                      </div>
-                      <span className="text-xs text-stone-500 dark:text-stone-400">{c.serverSlug}</span>
-                    </td>
-                    <td className="p-3 whitespace-nowrap">
-                      {c.claimant}
-                      <span className="block text-xs text-stone-500 dark:text-stone-400">Discord: {c.claimantDiscordId}</span>
-                    </td>
-                    <td className="p-3 whitespace-nowrap text-stone-600 dark:text-stone-400">{fmtDate(c.createdAt)}</td>
-                    <td className="p-3">
-                      <span className={`inline-flex px-2 py-0.5 rounded text-xs font-bold ${CLAIM_BADGE[c.status].className}`}>{CLAIM_BADGE[c.status].label}</span>
-                    </td>
-                    <td className="p-3">
-                      {c.status === 'pending' ? (
-                        <div className="flex items-center gap-2">
-                          <button type="button" onClick={() => act.mutate({ url: `/admin/claims/${c.id}/approve` })} disabled={act.isPending} className="inline-flex items-center gap-1 px-2 py-1 rounded-sm bg-green-600 text-white text-xs font-bold hover:bg-green-500 disabled:opacity-50">
-                            <Check className="size-3" /> Approve
-                          </button>
-                          <button type="button" onClick={() => act.mutate({ url: `/admin/claims/${c.id}/deny` })} disabled={act.isPending} className="inline-flex items-center gap-1 px-2 py-1 rounded-sm bg-red-600 text-white text-xs font-bold hover:bg-red-500 disabled:opacity-50">
-                            <ShieldX className="size-3" /> Deny
-                          </button>
-                        </div>
-                      ) : (
-                        <span className="text-xs text-stone-500 dark:text-stone-400">—</span>
-                      )}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )
-      ) : visibleReports.length === 0 ? (
-        <div className="rounded-sm border border-stone-400/60 dark:border-stone-600 bg-stone-200/50 dark:bg-stone-800/50 p-8 text-center text-sm text-stone-500 dark:text-stone-400">No {showResolved ? '' : 'open '}reports.</div>
       ) : (
-        <div className="rounded-sm border border-stone-400/60 dark:border-stone-600 overflow-x-auto">
-          <table className="w-full text-sm caption-bottom">
-            <thead>
-              <tr className="border-b border-stone-400/60 dark:border-stone-600 bg-stone-200/70 dark:bg-stone-700/50 text-left">
-                <th className="p-3 font-bold">Server</th>
-                <th className="p-3 font-bold">Reason</th>
-                <th className="p-3 font-bold">Reporter</th>
-                <th className="p-3 font-bold">Date</th>
-                <th className="p-3 font-bold">Status</th>
-                <th className="p-3 font-bold w-full">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="[&_tr:last-child]:border-0">
-              {visibleReports.map((r) => (
-                <tr key={r.id} className="border-b border-stone-400/40 dark:border-stone-700 align-top">
-                  <td className="p-3 whitespace-nowrap">
-                    <a href={`/${r.serverSlug}`} target="_blank" rel="noreferrer" className="font-minecraft text-sm text-stone-900 dark:text-stone-100 hover:text-primary inline-flex items-center gap-1">
-                      {r.serverName} <ExternalLink className="size-3" />
-                    </a>
-                    <span className="block text-xs text-stone-500 dark:text-stone-400">{r.serverSlug}</span>
-                  </td>
-                  <td className="p-3 max-w-xs break-words text-stone-700 dark:text-stone-300">{r.reason}</td>
-                  <td className="p-3 whitespace-nowrap">{r.reporter}</td>
-                  <td className="p-3 whitespace-nowrap text-stone-600 dark:text-stone-400">{fmtDate(r.createdAt)}</td>
-                  <td className="p-3">
-                    <span className={`inline-flex px-2 py-0.5 rounded text-xs font-bold ${REPORT_BADGE[r.status].className}`}>{REPORT_BADGE[r.status].label}</span>
-                  </td>
-                  <td className="p-3">
-                    {r.status === 'open' ? (
-                      <div className="flex items-center gap-2 flex-wrap">
-                        <button type="button" onClick={() => act.mutate({ url: `/admin/reports/${r.id}/resolve` })} disabled={act.isPending} className="inline-flex items-center gap-1 px-2 py-1 rounded-sm bg-green-600 text-white text-xs font-bold hover:bg-green-500 disabled:opacity-50">
-                          <Check className="size-3" /> Resolve
-                        </button>
-                        <button type="button" onClick={() => act.mutate({ url: `/admin/reports/${r.id}/dismiss` })} disabled={act.isPending} className="inline-flex items-center gap-1 px-2 py-1 rounded-sm bg-stone-500 text-white text-xs font-bold hover:bg-stone-400 disabled:opacity-50">
-                          <ShieldX className="size-3" /> Dismiss
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            if (window.confirm(`Delete server "${r.serverName}" and mark this report resolved? This cannot be undone.`)) {
-                              act.mutate({ url: `/admin/reports/${r.id}/delete-server` })
-                            }
-                          }}
-                          disabled={act.isPending}
-                          className="inline-flex items-center gap-1 px-2 py-1 rounded-sm bg-red-600 text-white text-xs font-bold hover:bg-red-500 disabled:opacity-50"
-                        >
-                          <Trash2 className="size-3" /> Delete server
-                        </button>
-                      </div>
-                    ) : (
-                      <span className="text-xs text-stone-500 dark:text-stone-400">—</span>
-                    )}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        <Card>
+          <CardContent className="p-0">
+            {tab === 'claims' ? (
+              visibleClaims.length === 0 ? (
+                <div className="p-8 text-center text-sm text-muted-foreground">No {showResolved ? '' : 'pending '}claims.</div>
+              ) : (
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Server</TableHead>
+                      <TableHead>Claimant</TableHead>
+                      <TableHead>Date</TableHead>
+                      <TableHead>Status</TableHead>
+                      <TableHead className="w-full">Actions</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {visibleClaims.map((c) => (
+                      <TableRow key={c.id} className="align-top">
+                        <TableCell className="whitespace-nowrap">
+                          <a href={`/${c.serverSlug}`} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 font-medium hover:text-primary hover:underline">
+                            {c.serverName} <ExternalLink className="h-3 w-3" />
+                          </a>
+                          <span className="block text-xs text-muted-foreground">{c.serverSlug}</span>
+                        </TableCell>
+                        <TableCell className="whitespace-nowrap">
+                          {c.claimant}
+                          <span className="block text-xs text-muted-foreground">Discord: {c.claimantDiscordId}</span>
+                        </TableCell>
+                        <TableCell className="whitespace-nowrap text-muted-foreground">{fmtDate(c.createdAt)}</TableCell>
+                        <TableCell><Badge variant={CLAIM_BADGE[c.status]}>{c.status}</Badge></TableCell>
+                        <TableCell>
+                          {c.status === 'pending' ? (
+                            <div className="flex items-center gap-2">
+                              <Button size="sm" variant="default" className="bg-green-600 hover:bg-green-700" onClick={() => act.mutate({ url: `/admin/claims/${c.id}/approve` })} disabled={act.isPending}>
+                                <Check className="h-3.5 w-3.5" /> Approve
+                              </Button>
+                              <Button size="sm" variant="outline" className="text-destructive hover:text-destructive" onClick={() => act.mutate({ url: `/admin/claims/${c.id}/deny` })} disabled={act.isPending}>
+                                <ShieldX className="h-3.5 w-3.5" /> Deny
+                              </Button>
+                            </div>
+                          ) : (
+                            <span className="text-xs text-muted-foreground">—</span>
+                          )}
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              )
+            ) : visibleReports.length === 0 ? (
+              <div className="p-8 text-center text-sm text-muted-foreground">No {showResolved ? '' : 'open '}reports.</div>
+            ) : (
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Server</TableHead>
+                    <TableHead>Reason</TableHead>
+                    <TableHead>Reporter</TableHead>
+                    <TableHead>Date</TableHead>
+                    <TableHead>Status</TableHead>
+                    <TableHead className="w-full">Actions</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {visibleReports.map((r) => (
+                    <TableRow key={r.id} className="align-top">
+                      <TableCell className="whitespace-nowrap">
+                        <a href={`/${r.serverSlug}`} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 font-medium hover:text-primary hover:underline">
+                          {r.serverName} <ExternalLink className="h-3 w-3" />
+                        </a>
+                        <span className="block text-xs text-muted-foreground">{r.serverSlug}</span>
+                      </TableCell>
+                      <TableCell className="max-w-xs break-words">{r.reason}</TableCell>
+                      <TableCell className="whitespace-nowrap">{r.reporter}</TableCell>
+                      <TableCell className="whitespace-nowrap text-muted-foreground">{fmtDate(r.createdAt)}</TableCell>
+                      <TableCell><Badge variant={REPORT_BADGE[r.status]}>{r.status}</Badge></TableCell>
+                      <TableCell>
+                        {r.status === 'open' ? (
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <Button size="sm" variant="default" className="bg-green-600 hover:bg-green-700" onClick={() => act.mutate({ url: `/admin/reports/${r.id}/resolve` })} disabled={act.isPending}>
+                              <Check className="h-3.5 w-3.5" /> Resolve
+                            </Button>
+                            <Button size="sm" variant="outline" onClick={() => act.mutate({ url: `/admin/reports/${r.id}/dismiss` })} disabled={act.isPending}>
+                              <ShieldX className="h-3.5 w-3.5" /> Dismiss
+                            </Button>
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              className="text-destructive hover:text-destructive"
+                              onClick={() => {
+                                if (window.confirm(`Delete server "${r.serverName}" and mark this report resolved? This cannot be undone.`)) {
+                                  act.mutate({ url: `/admin/reports/${r.id}/delete-server` })
+                                }
+                              }}
+                              disabled={act.isPending}
+                            >
+                              <Trash2 className="h-3.5 w-3.5" /> Delete server
+                            </Button>
+                          </div>
+                        ) : (
+                          <span className="text-xs text-muted-foreground">—</span>
+                        )}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            )}
+          </CardContent>
+        </Card>
       )}
     </div>
   )

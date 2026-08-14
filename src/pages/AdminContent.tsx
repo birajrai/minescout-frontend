@@ -4,6 +4,9 @@ import { useApiQuery } from '../lib/hooks'
 import { api } from '../lib/api'
 import { useFacets } from '../lib/servers'
 import { Loading, ErrorState } from '../components/Async'
+import { Input } from '../components/ui/input'
+import { Badge } from '../components/ui/badge'
+import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card'
 import type { BlogListResult, CmsPage } from '../lib/types'
 
 function useBlogAdminList() {
@@ -29,63 +32,71 @@ export function AdminContent() {
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <h2 className="font-minecraft text-xl text-stone-900 dark:text-stone-100">Content</h2>
-        <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-stone-500 pointer-events-none" />
-          <input
-            type="search"
-            value={q}
-            onChange={(e) => setQ(e.target.value)}
-            placeholder="Search posts & pages..."
-            className="h-10 w-64 pl-9 pr-3 rounded-sm border-2 border-stone-400 dark:border-stone-600 bg-stone-100 dark:bg-stone-800 text-sm text-stone-900 dark:text-stone-100 focus:outline-none focus:ring-2 focus:ring-primary"
-          />
-        </div>
+      <div className="flex flex-col gap-1">
+        <h1 className="text-2xl font-semibold tracking-tight">Content</h1>
+        <p className="text-sm text-muted-foreground">Blog posts, CMS pages and tag inventory.</p>
       </div>
 
-      <section className="flex flex-col gap-3">
-        <h3 className="font-minecraft text-lg text-stone-800 dark:text-stone-200">Blog posts ({filteredPosts.length})</h3>
-        <div className="flex flex-col gap-2">
-          {filteredPosts.map((p) => (
-            <div key={p.slug} className="flex items-center justify-between gap-3 rounded-sm border border-stone-400/60 dark:border-stone-600 bg-stone-200/50 dark:bg-stone-800/50 px-3 py-2">
-              <div className="flex flex-col min-w-0">
-                <span className="font-medium text-sm break-words">{p.title}</span>
-                <span className="text-xs text-stone-500 dark:text-stone-400">{p.slug}</span>
+      <div className="relative max-w-sm">
+        <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
+        <Input type="search" value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search posts & pages..." className="pl-8" />
+      </div>
+
+      <Card>
+        <CardHeader className="py-4">
+          <CardTitle className="text-base">Blog posts ({filteredPosts.length})</CardTitle>
+        </CardHeader>
+        <CardContent className="p-0">
+          <div className="flex flex-col divide-y">
+            {filteredPosts.length === 0 && <div className="p-8 text-center text-sm text-muted-foreground">No posts found.</div>}
+            {filteredPosts.map((p) => (
+              <div key={p.slug} className="flex items-center justify-between gap-3 px-4 py-2.5">
+                <div className="flex flex-col min-w-0">
+                  <span className="font-medium text-sm break-words">{p.title}</span>
+                  <span className="text-xs text-muted-foreground">{p.slug}</span>
+                </div>
+                <a href={`/blog/${p.slug}`} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-sm text-primary hover:underline shrink-0">
+                  <ExternalLink className="h-3.5 w-3.5" /> View
+                </a>
               </div>
-              <a href={`/blog/${p.slug}`} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-xs text-primary hover:underline shrink-0">
-                <ExternalLink className="size-3" /> View
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader className="py-4">
+          <CardTitle className="text-base">CMS pages ({pages.data?.length ?? 0})</CardTitle>
+        </CardHeader>
+        <CardContent className="pt-0">
+          <div className="flex flex-wrap gap-2">
+            {(pages.data ?? []).map((p) => (
+              <a key={p.slug} href={`/pages/${p.slug}`} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-md border bg-secondary/50 px-3 py-1.5 text-xs font-medium hover:border-primary/60 hover:bg-secondary transition-colors">
+                {p.title}
+                <ExternalLink className="h-3 w-3" />
               </a>
-            </div>
-          ))}
-        </div>
-      </section>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
 
-      <section className="flex flex-col gap-3">
-        <h3 className="font-minecraft text-lg text-stone-800 dark:text-stone-200">CMS pages ({pages.data?.length ?? 0})</h3>
-        <div className="flex flex-wrap gap-2">
-          {(pages.data ?? []).map((p) => (
-            <a key={p.slug} href={`/pages/${p.slug}`} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-sm border border-stone-400/60 dark:border-stone-600 bg-stone-200/50 dark:bg-stone-800/50 px-3 py-1.5 text-xs hover:border-primary/60 transition-colors">
-              {p.title}
-              <ExternalLink className="size-3" />
-            </a>
-          ))}
-        </div>
-      </section>
-
-      <section className="flex flex-col gap-3">
-        <h3 className="font-minecraft text-lg text-stone-800 dark:text-stone-200 flex items-center gap-2">
-          <Tags className="size-5 text-primary" />
-          Tags ({tags.data?.length ?? 0})
-        </h3>
-        <div className="flex flex-wrap gap-2">
-          {(tags.data ?? []).slice(0, 24).map((t) => (
-            <span key={t.slug} className="inline-flex items-center gap-1.5 rounded-sm border border-stone-400/60 dark:border-stone-600 bg-stone-200/50 dark:bg-stone-800/50 px-2.5 py-1 text-xs capitalize">
-              {t.name ?? t.slug}
-              <span className="text-stone-500 dark:text-stone-400">{t.serverCount}</span>
-            </span>
-          ))}
-        </div>
-      </section>
+      <Card>
+        <CardHeader className="py-4">
+          <CardTitle className="text-base flex items-center gap-2">
+            <Tags className="h-4 w-4" /> Tags ({tags.data?.length ?? 0})
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="pt-0">
+          <div className="flex flex-wrap gap-2">
+            {(tags.data ?? []).slice(0, 24).map((t) => (
+              <Badge key={t.slug} variant="outline" className="capitalize gap-1.5 py-1">
+                {t.name ?? t.slug}
+                <span className="text-muted-foreground">{t.serverCount}</span>
+              </Badge>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
     </div>
   )
 }

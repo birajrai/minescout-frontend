@@ -22,4 +22,12 @@ export const queryKeys = {
   realms: (params?: Record<string, string | number | undefined>) => ['realms', params] as const,
   realm: (code: string) => ['realm', code] as const,
   placements: (params?: { type?: string; gamemode?: string }) => ['placements', params] as const,
+  billing: ['me', 'billing'] as const,
+  myTransactions: ['me', 'transactions'] as const,
+  myReputation: ['me', 'reputation'] as const,
+  myPlacements: ['me', 'placements'] as const,
+  adminTransactions: ['admin', 'billing', 'transactions'] as const,
+  adminPlacements: ['admin', 'placements'] as const,
+  adminUsers: ['admin', 'users'] as const,
+  adminApiKeys: ['admin', 'api-keys'] as const,
 }

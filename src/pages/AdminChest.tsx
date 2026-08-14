@@ -1,48 +1,51 @@
 import { Box, Trash2, ExternalLink } from 'lucide-react'
 import { useChest, clearChest } from '../lib/chest'
+import { Button } from '../components/ui/button'
+import { Card, CardContent } from '../components/ui/card'
 
 export function AdminChest() {
   const chest = useChest()
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <h2 className="font-minecraft text-xl text-stone-900 dark:text-stone-100">Chest Data ({chest.length})</h2>
+        <div className="flex flex-col gap-1">
+          <h1 className="text-2xl font-semibold tracking-tight">Chest Data</h1>
+          <p className="text-sm text-muted-foreground">{chest.length} saved servers.</p>
+        </div>
         {chest.length > 0 && (
-          <button
-            type="button"
-            onClick={() => clearChest()}
-            className="inline-flex items-center gap-2 h-9 px-3 rounded-sm border-2 border-red-400/60 dark:border-red-600 bg-red-500/10 text-sm font-bold text-red-700 dark:text-red-400 hover:bg-red-500/20 transition-colors"
-          >
-            <Trash2 className="size-4" />
-            Clear chest
-          </button>
+          <Button variant="outline" className="text-destructive hover:text-destructive" onClick={() => clearChest()}>
+            <Trash2 className="h-4 w-4" /> Clear chest
+          </Button>
         )}
       </div>
+
       {chest.length === 0 ? (
-        <div className="rounded-sm border border-stone-400/60 dark:border-stone-600 bg-stone-200/50 dark:bg-stone-800/50 p-8 text-center text-sm text-stone-500 dark:text-stone-400">
-          <Box className="size-8 mx-auto mb-2 text-stone-400" />
-          No servers saved. Users click the yellow chest button on any listing to add servers here.
+        <div className="rounded-lg border bg-card p-10 text-center text-sm text-muted-foreground flex flex-col items-center gap-2">
+          <Box className="h-8 w-8 text-muted-foreground/60" />
+          <p>No servers saved. Users click the yellow chest button on any listing to add servers here.</p>
         </div>
       ) : (
-        <div className="flex flex-col gap-2">
-          {chest.map((item) => (
-            <div key={item.slug} className="flex items-center justify-between gap-3 rounded-sm border border-stone-400/60 dark:border-stone-600 bg-stone-200/50 dark:bg-stone-800/50 px-3 py-2">
-              <div className="flex items-center gap-3 min-w-0">
-                <img src={item.icon} alt="" className="size-8 rounded object-cover shrink-0" loading="lazy" onError={(e) => { e.currentTarget.style.display = 'none' }} />
-                <div className="flex flex-col min-w-0">
-                  <span className="font-medium text-sm truncate">{item.name}</span>
-                  <span className="text-xs text-stone-500 dark:text-stone-400 truncate">{item.ip}</span>
+        <Card>
+          <CardContent className="p-0">
+            <div className="flex flex-col divide-y">
+              {chest.map((item) => (
+                <div key={item.slug} className="flex items-center justify-between gap-3 px-4 py-2.5">
+                  <div className="flex items-center gap-3 min-w-0">
+                    <img src={item.icon} alt="" className="h-8 w-8 rounded object-cover shrink-0" loading="lazy" onError={(e) => { e.currentTarget.style.display = 'none' }} />
+                    <div className="flex flex-col min-w-0">
+                      <span className="font-medium text-sm truncate">{item.name}</span>
+                      <span className="text-xs text-muted-foreground truncate">{item.ip}</span>
+                    </div>
+                  </div>
+                  <a href={item.url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-sm text-primary hover:underline shrink-0">
+                    <ExternalLink className="h-3.5 w-3.5" /> View
+                  </a>
                 </div>
-              </div>
-              <div className="flex items-center gap-2 shrink-0">
-                <a href={item.url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-xs text-primary hover:underline">
-                  <ExternalLink className="size-3" /> View
-                </a>
-              </div>
+              ))}
             </div>
-          ))}
-        </div>
+          </CardContent>
+        </Card>
       )}
     </div>
   )

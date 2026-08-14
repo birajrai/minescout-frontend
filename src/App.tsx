@@ -8,9 +8,16 @@ import { AddServer } from './pages/dashboard/AddServer'
 import { EditServer } from './pages/dashboard/EditServer'
 import { DashboardRealms } from './pages/dashboard/DashboardRealms'
 import { DashboardSettings } from './pages/dashboard/DashboardSettings'
-import { Placeholder } from './pages/dashboard/Placeholder'
+import { ReputationPage } from './pages/dashboard/ReputationPage'
+import { ProSubscriptionsPage } from './pages/dashboard/ProSubscriptionsPage'
+import { SponsoredSlotsPage } from './pages/dashboard/SponsoredSlotsPage'
+import { TransactionsPage } from './pages/dashboard/TransactionsPage'
 import { AdminLayout } from './pages/AdminLayout'
 import { AdminAds } from './pages/AdminAds'
+import { AdminUsers } from './pages/AdminUsers'
+import { AdminApiKeys } from './pages/AdminApiKeys'
+import { AdminPlacements } from './pages/AdminPlacements'
+import { AdminBilling } from './pages/AdminBilling'
 import { RealmPage } from './pages/RealmPage'
 import { ServerLayout } from './pages/ServerLayout'
 import { ServerOverview } from './pages/ServerOverview'
@@ -34,6 +41,7 @@ const Tags = lazy(() => import('./pages/Facets').then((m) => ({ default: m.Tags 
 const SearchPage = lazy(() => import('./pages/SearchPage').then((m) => ({ default: m.SearchPage })))
 const ContentPage = lazy(() => import('./pages/ContentPage').then((m) => ({ default: m.ContentPage })))
 const ToolsPage = lazy(() => import('./pages/ToolsPage').then((m) => ({ default: m.ToolsPage })))
+const MotdGenerator = lazy(() => import('./pages/MotdGenerator').then((m) => ({ default: m.MotdGenerator })))
 const BlogIndex = lazy(() => import('./pages/Blog').then((m) => ({ default: m.BlogIndex })))
 const BlogPost = lazy(() => import('./pages/Blog').then((m) => ({ default: m.BlogPost })))
 const StatsPage = lazy(() => import('./pages/StatsPage').then((m) => ({ default: m.StatsPage })))
@@ -63,6 +71,7 @@ function App() {
         <Route path="pages/:slug" element={<ContentPage />} />
         <Route path="pages/server-status-checker" element={<ToolsPage tool="status" />} />
         <Route path="pages/votifier-tester" element={<ToolsPage tool="votifier" />} />
+        <Route path="pages/motd-generator" element={<MotdGenerator />} />
         <Route path="featured-slots" element={<ContentPage slug="featured-slots" />} />
         <Route path="sponsored-slots" element={<ContentPage slug="sponsored-slots" />} />
         <Route path="pro-pricing" element={<ContentPage slug="pro-pricing" />} />
@@ -87,10 +96,10 @@ function App() {
           <Route path="servers/:slug" element={<EditServer />} />
           <Route path="servers/:slug/votifier" element={<EditServer votifier />} />
           <Route path="realms" element={<DashboardRealms />} />
-          <Route path="reputation" element={<Placeholder label="Reputation" />} />
-          <Route path="pro-subscriptions" element={<Placeholder label="Pro Subscriptions" />} />
-          <Route path="sponsored-slots" element={<Placeholder label="Sponsored Slots" />} />
-          <Route path="transactions" element={<Placeholder label="Transactions" />} />
+          <Route path="reputation" element={<ReputationPage />} />
+          <Route path="pro-subscriptions" element={<ProSubscriptionsPage />} />
+          <Route path="sponsored-slots" element={<SponsoredSlotsPage />} />
+          <Route path="transactions" element={<TransactionsPage />} />
           <Route path="settings" element={<DashboardSettings />} />
           <Route path="*" element={<DashboardHome />} />
         </Route>
@@ -109,6 +118,10 @@ function App() {
           <Route path="content" element={<AdminContent />} />
           <Route path="tags" element={<AdminTags />} />
           <Route path="chest" element={<AdminChest />} />
+          <Route path="users" element={<AdminUsers />} />
+          <Route path="api-keys" element={<AdminApiKeys />} />
+          <Route path="placements" element={<AdminPlacements />} />
+          <Route path="billing" element={<AdminBilling />} />
         </Route>
         <Route path=":slug" element={<ServerLayout />}>
           <Route index element={<ServerOverview />} />
