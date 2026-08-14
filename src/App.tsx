@@ -38,6 +38,7 @@ const BlogIndex = lazy(() => import('./pages/Blog').then((m) => ({ default: m.Bl
 const BlogPost = lazy(() => import('./pages/Blog').then((m) => ({ default: m.BlogPost })))
 const StatsPage = lazy(() => import('./pages/StatsPage').then((m) => ({ default: m.StatsPage })))
 const LoginPage = lazy(() => import('./pages/LoginPage').then((m) => ({ default: m.LoginPage })))
+const RegisterPage = lazy(() => import('./pages/RegisterPage').then((m) => ({ default: m.RegisterPage })))
 
 function App() {
   return (
@@ -71,6 +72,7 @@ function App() {
         <Route path="blog/:slug" element={<BlogPost />} />
         <Route path="stats" element={<StatsPage />} />
         <Route path="login" element={<LoginPage />} />
+        <Route path="register" element={<RegisterPage />} />
         <Route
           path="dashboard"
           element={
