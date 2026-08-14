@@ -134,7 +134,7 @@ export function ServerLayout() {
 
       <div className="wrapper flex flex-col gap-4 xl:p-0 px-3">
         <section className="grid grid-cols-1 md:grid-cols-8 lg:grid-cols-4 md:border rounded-sm overflow-hidden border-border">
-          <aside className="col-span-1 md:col-span-3 lg:col-span-1 bg-stone-300 dark:bg-stone-900 m-4 md:m-0 p-4 md:border-r dark:border-r-0">
+          <aside className="col-span-1 md:col-span-3 lg:col-span-1 bg-stone-300 dark:bg-stone-900 md:m-0 p-4 md:border-r dark:border-r-0">
             <div className="flex flex-col gap-4">
               <div className="flex gap-2 items-center cursor-help min-w-0">
                 <img src={server.icon} alt={`${server.name} Minecraft Server Icon`} className="size-8 aspect-square rounded pointer-events-none select-none object-cover" width="32" height="32" loading="lazy" data-placeholder="/assets/placeholder-server-icon.svg" onError={(e) => { const el = e.currentTarget; el.onerror = null; el.src = el.dataset.placeholder || '' }} />

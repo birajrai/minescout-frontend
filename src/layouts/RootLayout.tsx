@@ -16,17 +16,9 @@ export function RootLayout() {
     <div className="flex min-h-screen flex-col">
       <Navbar />
       <main className="flex-1 flex flex-col">
-        {pathname === '/' ? (
-          <Suspense fallback={<Loading label="Loading…" />}>
-            <Outlet />
-          </Suspense>
-        ) : (
-          <div className="wrapper my-8 px-3">
-            <Suspense fallback={<Loading label="Loading…" />}>
-              <Outlet />
-            </Suspense>
-          </div>
-        )}
+        <Suspense fallback={<Loading label="Loading…" />}>
+          <Outlet />
+        </Suspense>
       </main>
       <Footer />
       <Chest />
