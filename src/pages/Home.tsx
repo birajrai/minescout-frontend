@@ -142,26 +142,16 @@ export function Home() {
   const top = items.filter((s) => !s.featured)
   const totalPages = serversQuery.data ? Math.max(1, Math.ceil(serversQuery.data.total / serversQuery.data.limit)) : 1
   const hasMore = page < totalPages
-  const heroStats = statsQuery.data
-    ? [
-        { num: statsQuery.data.serversOnline.toLocaleString(), label: 'Servers Online' },
-        { num: statsQuery.data.playersOnline.toLocaleString(), label: 'Players Online' },
-      ]
-    : []
+  const heroStats = [
+    { num: statsQuery.data ? statsQuery.data.serversOnline.toLocaleString() : '0', label: 'Servers Online' },
+    { num: statsQuery.data ? statsQuery.data.playersOnline.toLocaleString() : '0', label: 'Players Online' },
+  ]
 
   const setSort = (v: string) => {
     changeSort(v)
   }
 
-  if (serversQuery.isLoading || statsQuery.isLoading)
-    return (
-      <div className="flex flex-col gap-3">
-        {Array.from({ length: 3 }).map((_, i) => (
-          <ListingCardSkeleton key={i} />
-        ))}
-      </div>
-    )
-  if (serversQuery.error) return <ErrorState error={serversQuery.error} onRetry={() => void serversQuery.refetch()} />
+  if (serversQuery.error && items.length === 0) return <ErrorState error={serversQuery.error} onRetry={() => void serversQuery.refetch()} />
 
   return (
     <>
@@ -226,9 +216,13 @@ export function Home() {
               Sponsored servers
             </h2>
             <div className="flex flex-col gap-3">
-              {sponsored.map((s) => (
-                <ListingCard key={s.slug} server={s} sponsored />
-              ))}
+              {serversQuery.isLoading ? (
+                <ListingCardSkeleton />
+              ) : (
+                sponsored.map((s) => (
+                  <ListingCard key={s.slug} server={s} sponsored />
+                ))
+              )}
             </div>
           </div>
 
@@ -262,9 +256,15 @@ export function Home() {
           </div>
 
           <div id="servers-list" className="flex flex-col gap-3">
-            {top.map((s, i) => (
-              <ListingCard key={s.slug} server={s} rank={`#${i + 1}`} />
-            ))}
+            {serversQuery.isLoading ? (
+              Array.from({ length: 3 }).map((_, i) => (
+                <ListingCardSkeleton key={i} />
+              ))
+            ) : (
+              top.map((s, i) => (
+                <ListingCard key={s.slug} server={s} rank={`#${i + 1}`} />
+              ))
+            )}
           </div>
 
           <div className="flex justify-center pt-2 pb-4">
