@@ -209,3 +209,5 @@ export function AdminModeration() {
     </div>
   )
 }
+
+export default AdminModeration

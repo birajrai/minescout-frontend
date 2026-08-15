@@ -74,3 +74,5 @@ export function SponsoredSlotsPage() {
     </div>
   )
 }
+
+export default SponsoredSlotsPage

@@ -168,3 +168,5 @@ export function AdminApiKeys() {
     </div>
   )
 }
+
+export default AdminApiKeys

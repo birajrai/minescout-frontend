@@ -122,3 +122,5 @@ export function ServerStats() {
     </div>
   )
 }
+
+export default ServerStats

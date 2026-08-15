@@ -255,3 +255,5 @@ export function BlogEditor() {
     </div>
   )
 }
+
+export default BlogEditor

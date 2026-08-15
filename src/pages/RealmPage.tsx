@@ -56,3 +56,5 @@ export function RealmPage() {
     </>
   )
 }
+
+export default RealmPage

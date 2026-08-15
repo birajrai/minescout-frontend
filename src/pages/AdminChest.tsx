@@ -50,3 +50,5 @@ export function AdminChest() {
     </div>
   )
 }
+
+export default AdminChest

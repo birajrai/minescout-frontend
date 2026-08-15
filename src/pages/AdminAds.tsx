@@ -176,3 +176,5 @@ export function AdminAds() {
     </div>
   )
 }
+
+export default AdminAds

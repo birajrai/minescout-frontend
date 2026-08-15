@@ -236,3 +236,5 @@ export function ProSubscriptionsPage() {
     </div>
   )
 }
+
+export default ProSubscriptionsPage

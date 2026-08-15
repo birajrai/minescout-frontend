@@ -78,3 +78,5 @@ export function DashboardSettings() {
     </div>
   )
 }
+
+export default DashboardSettings

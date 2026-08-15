@@ -60,3 +60,5 @@ export function AdminTags() {
     </div>
   )
 }
+
+export default AdminTags

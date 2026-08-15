@@ -323,3 +323,5 @@ export function ServerLayout() {
     </>
   )
 }
+
+export default ServerLayout

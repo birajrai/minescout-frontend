@@ -139,3 +139,5 @@ export function ServerOverview() {
     </article>
   )
 }
+
+export default ServerOverview

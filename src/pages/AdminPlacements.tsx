@@ -204,3 +204,5 @@ export function AdminPlacements() {
     </div>
   )
 }
+
+export default AdminPlacements

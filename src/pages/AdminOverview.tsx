@@ -149,3 +149,5 @@ export function AdminOverview() {
     </div>
   )
 }
+
+export default AdminOverview

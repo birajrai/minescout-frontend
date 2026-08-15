@@ -83,3 +83,5 @@ export function StatsPage() {
     </>
   )
 }
+
+export default StatsPage

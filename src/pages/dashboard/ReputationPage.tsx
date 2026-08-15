@@ -125,3 +125,5 @@ export function ReputationPage() {
     </div>
   )
 }
+
+export default ReputationPage

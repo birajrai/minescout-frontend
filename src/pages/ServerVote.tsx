@@ -182,3 +182,5 @@ export function ServerVote() {
     </div>
   )
 }
+
+export default ServerVote

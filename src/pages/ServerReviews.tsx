@@ -122,3 +122,5 @@ export function ServerReviews() {
     </div>
   )
 }
+
+export default ServerReviews

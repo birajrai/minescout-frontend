@@ -143,3 +143,5 @@ export function AdminServers() {
     </div>
   )
 }
+
+export default AdminServers

@@ -176,3 +176,5 @@ export function AddServer() {
     </div>
   )
 }
+
+export default AddServer

@@ -146,3 +146,5 @@ export function DashboardRealms() {
     </div>
   )
 }
+
+export default DashboardRealms

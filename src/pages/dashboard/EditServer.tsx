@@ -188,3 +188,5 @@ export function EditServer({ votifier = false }: { votifier?: boolean }) {
     </div>
   )
 }
+
+export default EditServer
