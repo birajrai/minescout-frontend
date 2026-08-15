@@ -106,6 +106,12 @@ export interface VoteResult {
   weeklyVotes: number
 }
 
+export interface RecentVote {
+  username: string
+  source: 'web' | 'discord'
+  votedAt: string
+}
+
 export interface Facet {
   slug: string
   name?: string
