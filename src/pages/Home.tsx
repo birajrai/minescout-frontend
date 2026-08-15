@@ -293,12 +293,10 @@ export function Home() {
 
         <section className="wrapper">
           <img
-            src="/brand/minescout_landing_banner-1280.webp?v=1786293318"
-            srcSet="/brand/minescout_landing_banner-640.webp?v=1786293318 640w, /brand/minescout_landing_banner-1280.webp?v=1786293318 1280w"
-            sizes="(max-width: 1280px) 100vw, 1280px"
+            src="/brand/banner.avif?v=1786293318"
             alt="minescout banner"
             width="1280"
-            height="266"
+            height="272"
             loading="lazy"
             decoding="async"
             className="w-full h-auto rounded-sm"

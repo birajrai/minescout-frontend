@@ -5,7 +5,7 @@ export function Footer() {
         <div className="flex flex-col gap-8">
           <div className="flex flex-col gap-3">
             <a href="/" className="w-fit flex items-center">
-              <img src="/brand/minescout-logo.png" alt="Minescout logo" className="h-8 w-auto max-w-[140px] object-contain object-left" width="140" height="32" decoding="async" />
+              <img src="/brand/minescout-logo.avif" alt="Minescout logo" className="h-8 w-auto max-w-[140px] object-contain object-left" width="140" height="32" decoding="async" />
             </a>
             <p className="max-w-md leading-relaxed">Minescout is a Minecraft Server List that helps you find the best Minecraft servers and vote for your most popular MC server.</p>
           </div>

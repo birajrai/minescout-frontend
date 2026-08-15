@@ -111,7 +111,7 @@ export function Navbar() {
       {/* Mobile bar */}
       <div className="flex lg:hidden w-full items-center justify-between bg-stone-200 dark:bg-stone-900 border-b border-stone-300 dark:border-stone-700 px-3 py-2.5">
         <Link to="/" className="inline-block h-8 flex items-center">
-          <img src="/brand/minescout-logo.png" alt="Minescout logo" className="h-8 w-auto max-w-[140px] object-contain object-left" width="140" height="32" decoding="async" />
+          <img src="/brand/minescout-logo.avif" alt="Minescout logo" className="h-8 w-auto max-w-[140px] object-contain object-left" width="140" height="32" decoding="async" />
         </Link>
         <div className="flex items-center gap-2">
           <button type="button" id="mobile-search-trigger" onClick={() => setSearchOpen(true)} className="inline-flex items-center justify-center h-9 w-9 rounded-sm font-bold text-sm border-y-4 border-transparent hover:bg-stone-400/50 dark:hover:bg-stone-700/50 focus:outline-none focus-visible:ring-2 focus-visible:ring-stone-500 focus-visible:ring-offset-2 border-none active:bg-stone-400/30 dark:active:bg-stone-700/30 cursor-pointer" aria-label="Search">
@@ -230,7 +230,7 @@ export function Navbar() {
           <div className="flex items-center gap-2 xl:gap-8 min-w-0 flex-1">
             <div className="shrink-0">
               <Link to="/" id="logo" className="inline-block h-9 flex items-center">
-                <img src="/brand/minescout-logo.png" alt="Minescout logo" className="h-9 w-auto max-w-[160px] object-contain object-left" width="160" height="36" decoding="async" />
+                <img src="/brand/minescout-logo.avif" alt="Minescout logo" className="h-9 w-auto max-w-[160px] object-contain object-left" width="160" height="36" decoding="async" />
               </Link>
             </div>
             <nav aria-label="Main" className="flex-1 hidden md:flex items-center justify-between">
