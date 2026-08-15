@@ -1,15 +1,17 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "framework": "vite",
-  "outputDirectory": "build/client",
   "rewrites": [
     {
       "source": "/api/:path*",
       "destination": "https://minescout-api.bharosilo.com/:path*"
     },
     {
-      "source": "/(.*)",
-      "destination": "/index.html"
+      "source": "/admin/:path*",
+      "destination": "/spa/app.html"
+    },
+    {
+      "source": "/dashboard/:path*",
+      "destination": "/spa/app.html"
     }
   ],
   "headers": [

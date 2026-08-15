@@ -92,7 +92,7 @@ export function BlogEditor() {
         seoTitle,
         seoDescription,
       }),
-    onSuccess: () => navigate('/admin/content'),
+    onSuccess: () => navigate('/admin/blog'),
   })
 
   const update = useMutation<{ success: boolean }, ApiError>({
@@ -109,7 +109,7 @@ export function BlogEditor() {
         seoTitle,
         seoDescription,
       }),
-    onSuccess: () => navigate('/admin/content'),
+    onSuccess: () => navigate('/admin/blog'),
   })
 
   const isPending = create.isPending || update.isPending
@@ -121,7 +121,7 @@ export function BlogEditor() {
   return (
     <div className="flex flex-col gap-6">
       <div className="flex flex-col gap-1">
-        <Link to="/admin/content" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors">
+        <Link to="/admin/blog" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors">
           <ArrowLeft className="h-3.5 w-3.5" /> Back to content
         </Link>
         <h1 className="text-2xl font-semibold tracking-tight">{isEdit ? 'Edit post' : 'New post'}</h1>
@@ -131,7 +131,7 @@ export function BlogEditor() {
       {isEdit && !post ? (
         <div className="rounded-lg border border-dashed p-8 text-center text-sm text-muted-foreground">
           Post not found.{' '}
-          <Link to="/admin/content" className="text-primary hover:underline">Back to content</Link>
+          <Link to="/admin/blog" className="text-primary hover:underline">Back to content</Link>
         </div>
       ) : (
         <form
@@ -246,7 +246,7 @@ export function BlogEditor() {
 
           <div className="flex items-center justify-end gap-2">
             <Button type="button" variant="outline" asChild>
-              <Link to="/admin/content">Cancel</Link>
+              <Link to="/admin/blog">Cancel</Link>
             </Button>
             <Button type="submit" disabled={isPending}>{isPending ? 'Saving…' : isEdit ? 'Save changes' : 'Create post'}</Button>
           </div>

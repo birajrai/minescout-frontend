@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <title>Minescout — Dashboard & Admin</title>
+    <script>
+      ;(function () {
+        var storageKey = 'theme'
+        var defaultTheme = 'system'
+        var stored = localStorage.getItem(storageKey) || defaultTheme
+        var resolved = stored === 'system'
+          ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
+          : stored
+        document.documentElement.classList.add(resolved)
+        document.documentElement.style.colorScheme = resolved
+      })()
+    </script>
+  </head>
+  <body class="antialiased">
+    <div id="root"></div>
+    <script type="module" src="/src/app-main.tsx"></script>
+  </body>
+</html>

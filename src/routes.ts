@@ -1,5 +1,7 @@
 import { type RouteConfig, index, layout, route } from '@react-router/dev/routes'
 
+// Public site only (server-rendered). Admin + user dashboard live in the
+// client-only SPA entry (app.html -> src/app-main.tsx).
 export default [
   layout('./routes/layout-public.tsx', [
     index('./pages/Home.tsx'),
@@ -32,20 +34,6 @@ export default [
     route('stats', './pages/StatsPage.tsx'),
     route('login', './pages/LoginPage.tsx'),
     route('register', './pages/RegisterPage.tsx'),
-    route('dashboard', './routes/layout-dashboard.tsx', [
-      index('./pages/dashboard/DashboardHome.tsx', { id: 'routes/dashboard-home-index' }),
-      route('servers', './pages/dashboard/DashboardHome.tsx', { id: 'routes/dashboard-home-servers' }),
-      route('servers/add', './pages/dashboard/AddServer.tsx'),
-      route('servers/:slug', './pages/dashboard/EditServer.tsx'),
-      route('servers/:slug/votifier', './routes/edit-server-votifier.tsx'),
-      route('realms', './pages/dashboard/DashboardRealms.tsx'),
-      route('reputation', './pages/dashboard/ReputationPage.tsx'),
-      route('pro-subscriptions', './pages/dashboard/ProSubscriptionsPage.tsx'),
-      route('sponsored-slots', './pages/dashboard/SponsoredSlotsPage.tsx'),
-      route('transactions', './pages/dashboard/TransactionsPage.tsx'),
-      route('settings', './pages/dashboard/DashboardSettings.tsx'),
-      route('*', './pages/dashboard/DashboardHome.tsx', { id: 'routes/dashboard-home-catchall' }),
-    ]),
     route(':slug', './pages/ServerLayout.tsx', [
       index('./pages/ServerOverview.tsx'),
       route('vote', './pages/ServerVote.tsx'),
@@ -54,21 +42,5 @@ export default [
     ]),
     route('realm/:code', './pages/RealmPage.tsx'),
     route('*', './pages/NotFound.tsx', { id: 'routes/not-found-public' }),
-  ]),
-  route('admin', './routes/layout-admin.tsx', [
-    index('./pages/AdminOverview.tsx'),
-    route('servers', './pages/AdminServers.tsx'),
-    route('moderation', './pages/AdminModeration.tsx'),
-    route('ads', './pages/AdminAds.tsx'),
-    route('content', './pages/AdminContent.tsx'),
-    route('content/blog/new', './pages/BlogEditor.tsx', { id: 'routes/blog-editor-new' }),
-    route('content/blog/:id/edit', './pages/BlogEditor.tsx', { id: 'routes/blog-editor-edit' }),
-    route('tags', './pages/AdminTags.tsx'),
-    route('chest', './pages/AdminChest.tsx'),
-    route('users', './pages/AdminUsers.tsx'),
-    route('api-keys', './pages/AdminApiKeys.tsx'),
-    route('placements', './pages/AdminPlacements.tsx'),
-    route('billing', './pages/AdminBilling.tsx'),
-    route('*', './pages/NotFound.tsx', { id: 'routes/not-found-admin' }),
   ]),
 ] satisfies RouteConfig

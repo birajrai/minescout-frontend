@@ -39,6 +39,7 @@ export interface Server {
   uptimePct: number
   rating: number
   reviewCount: number
+  proGrantedUntil: string | null
   createdAt: string
   updatedAt: string
   rank?: number

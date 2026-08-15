@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { Link, useParams, useSearchParams } from 'react-router'
+import { Link, useLocation, useParams, useSearchParams } from 'react-router'
 import { ChevronRight } from 'lucide-react'
 import { PageHero } from '../components/Shared'
 import { ListingCard } from '../components/ListingCard'
@@ -70,7 +70,7 @@ function sortLabel(sort: string): string {
 }
 
 export function ServerList() {
-  const { pathname } = window.location
+  const { pathname } = useLocation()
   const { slug } = useParams()
   const [searchParams, setSearchParams] = useSearchParams()
   const sort = SORT_MAP[searchParams.get('sort') ?? 'votes'] ?? 'weekly'

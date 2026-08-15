@@ -1,11 +1,14 @@
-/* Minescout — frontend.
- * Base + reset + utilities are served by the compiled CSS loaded in
- * index.html (/assets/css/tailwind.css + /assets/css/main.min.css).
- * This file adds shadcn/ui theme tokens + on-demand utilities on top (no
- * preflight reset, so the Minescout-styled public pages are untouched). */
+/* Minescout — single Tailwind v4 stylesheet (theme + preflight + utilities).
+ * Legacy compiled CSS (v3 tailwind + custom theme) is bundled in here so the
+ * app ships exactly ONE css asset. Legacy content gets migrated to v4
+ * utilities over time, then removed from ./legacy. */
 
-@import 'tailwindcss' theme;
-@import 'tailwindcss' utilities;
+@import './legacy/main.min.css';
+@import './legacy/tailwind.css';
+@import './legacy/noto-sans.css';
+@import './legacy/jetbrains-mono.css';
+@import 'tailwindcss';
+@plugin '@tailwindcss/typography';
 
 /* class-based dark mode (matches the site's .dark toggle on <html>) */
 @custom-variant dark (&:where(.dark, .dark *));
@@ -36,8 +39,20 @@
   --radius-xl: calc(var(--radius) + 4px);
 }
 
+@theme {
+  --font-sans: 'Noto Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-minecraft: 'Minecraft Ten', ui-monospace, monospace;
+  --font-minecraft-seven: 'Minecraft Seven', ui-monospace, monospace;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  --color-brand: #7ccf00;
+  --color-brand-dark: #86e21a;
+  --color-brand-foreground: #101408;
+  --color-brand-deep: #35530e;
+}
+
 :root {
   --radius: 0.5rem;
+  --wrapper-max: 1280px;
   --background: oklch(1 0 0);
   --foreground: oklch(0.141 0.005 285.823);
   --card: oklch(1 0 0);
@@ -81,14 +96,20 @@
   --ring: #86e21a;
 }
 
-.font-minecraft-ten {
-  font-family: var(--font-minecraft-ten);
+/* v4 defaults border-color to currentColor; restore theme-border default
+ * (matches v3 behavior the codebase was built against). */
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--border);
+  }
+
+  button:not(:disabled),
+  [role='button']:not(:disabled) {
+    cursor: pointer;
+  }
 }
 
-/* shim: accent tokens for legacy components */
-.bg-card { background-color: var(--card); }
-.text-foreground { color: var(--foreground); }
-.text-muted-foreground { color: var(--muted-foreground); }
-.border-border { border-color: var(--border); }
-.bg-destructive { background-color: var(--destructive); }
-.text-destructive { color: var(--destructive); }
