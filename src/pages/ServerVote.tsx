@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react'
-import { useOutletContext } from 'react-router'
+import { Link, useOutletContext } from 'react-router'
 import { useMutation } from '@tanstack/react-query'
 import { api, errorMessage, ApiError } from '../lib/api'
 import { useApiQuery } from '../lib/hooks'
+import { useAuth } from '../lib/auth'
 import { ContentSkeleton } from '../components/Skeletons'
 import type { Server, VoteCheck, VoteResult, RecentVote } from '../lib/types'
 
@@ -10,6 +11,12 @@ const USERNAME_PATTERN = '[a-zA-Z0-9_]{2,16}'
 
 export function ServerVote() {
   const { server } = useOutletContext<{ server: Server }>()
+  const { user, isLoading: authLoading } = useAuth()
+  const settingsQuery = useApiQuery<{ guestVotingEnabled: boolean }>(
+    ['settings'],
+    () => api.get<{ guestVotingEnabled: boolean }>('/settings'),
+    { staleTime: 60_000 }
+  )
   const [username, setUsername] = useState('')
   const [email, setEmail] = useState('')
   const [writeReview, setWriteReview] = useState(true)
@@ -52,6 +59,10 @@ export function ServerVote() {
   const canVote = check ? check.canVote : true
   const voteError = voteMutation.isError ? errorMessage(voteMutation.error) : null
   const checkBlocked = check && !check.canVote ? check.reason ?? null : null
+  const guestVotingEnabled = settingsQuery.data?.guestVotingEnabled ?? false
+  const isGuest = !user
+  const voteGateLoading = authLoading || settingsQuery.isLoading
+  const guestVotingBlocked = !voteGateLoading && isGuest && !guestVotingEnabled
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -73,6 +84,23 @@ export function ServerVote() {
         )}
         {voteError && <p className="mb-4 rounded-sm border border-red-600/40 bg-red-500/10 px-3 py-2 text-sm text-red-700 dark:text-red-400">{voteError}</p>}
         {checkBlocked && <p className="mb-4 rounded-sm border border-amber-600/40 bg-amber-500/10 px-3 py-2 text-sm text-amber-700 dark:text-amber-400">{checkBlocked}</p>}
+        {voteGateLoading ? (
+          <div className="max-w-md"><ContentSkeleton lines={3} /></div>
+        ) : guestVotingBlocked ? (
+          <div className="flex flex-col gap-3 rounded-sm border border-stone-300 dark:border-stone-600 bg-stone-200/70 dark:bg-stone-700/50 p-5 max-w-md">
+            <p className="text-sm text-stone-800 dark:text-stone-200">
+              You need to be signed in to vote for {server.name}.
+            </p>
+            <Link
+              to={`/login?next=${encodeURIComponent(`/${server.slug}/vote`)}`}
+              className="btn-accent btn-wrapper relative rounded-md before:rounded-md h-10 before:h-10 w-full sm:w-auto inline-flex"
+            >
+              <span className="btn-surface rounded-md font-bold border select-none w-full h-full px-6 py-3 inline-flex items-center justify-center gap-2 text-sm">
+                Sign in to vote
+              </span>
+            </Link>
+          </div>
+        ) : (
         <form className="flex flex-col gap-4 max-w-md" onSubmit={submit}>
           <input type="hidden" name="server_slug" value={server.slug} />
           <div>
@@ -118,6 +146,7 @@ export function ServerVote() {
             </span>
           </button>
         </form>
+        )}
       </section>
 
       <section className="flex flex-col gap-4">

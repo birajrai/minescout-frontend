@@ -21,7 +21,6 @@ export function Footer() {
                 <a className="footer-link" href="/pages/glossary">Glossary</a>
                 <a className="footer-link" href="/stats">Stats</a>
                 <a className="footer-link" href="/pages/are-minecraft-servers-down">Minecraft &amp; auth status</a>
-                <a className="footer-link" href="https://live.minelist.com/status/uptime" target="_blank" rel="noreferrer nofollow">Service Uptime Status</a>
               </div>
             </div>
             <div className="footer-link-wrapper">
@@ -56,16 +55,10 @@ export function Footer() {
 
           <div className="flex flex-col gap-1 border-t border-stone-300 dark:border-stone-700 pt-6 text-xs leading-relaxed">
             <p>© 2026 Minescout. All rights reserved.</p>
-            <p>Minescout · Aquilino de la Guardia St., Banistmo Tower, 10th Floor · Panama City, Panama</p>
             <p>
               Minecraft and all associated Minecraft images are copyright of Mojang AB.
               <br />
               We are not affiliated with Minecraft or Mojang AB.
-            </p>
-            <p className="mt-2">
-              <a href="https://builtbybit.com/resources/minelist-minecraft-server-list-script.97340/" target="_blank" rel="nofollow noopener noreferrer" className="text-stone-500 dark:text-stone-400 hover:underline">
-                Powered by MineScout, a Minecraft server list script
-              </a>
             </p>
           </div>
         </div>

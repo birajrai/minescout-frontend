@@ -1,11 +1,15 @@
 import { Link } from 'react-router'
 import { Server, Users, Hash, Layers, Globe, ShieldAlert, Tags, Vote, Box } from 'lucide-react'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { api, errorMessage, ApiError } from '../lib/api'
 import { useAdminDashboard } from '../lib/admin-api'
+import { useApiQuery } from '../lib/hooks'
 import { useFacets } from '../lib/servers'
 import { useChest } from '../lib/chest'
 import { ErrorState } from '../components/Async'
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card'
 import { CardGridSkeleton } from '../components/Skeletons'
+import { Switch } from '../components/ui/switch'
 import { cn } from '../lib/utils'
 
 export function AdminOverview() {
@@ -14,6 +18,20 @@ export function AdminOverview() {
   const versions = useFacets('versions')
   const countries = useFacets('countries')
   const chest = useChest()
+  const queryClient = useQueryClient()
+
+  const settingsQuery = useApiQuery<{ guestVotingEnabled: boolean }>(
+    ['settings'],
+    () => api.get<{ guestVotingEnabled: boolean }>('/settings'),
+    { staleTime: 60_000 }
+  )
+
+  const guestVotingMutation = useMutation<{ success: boolean }, ApiError, boolean>({
+    mutationFn: (enabled) => api.post<{ success: boolean }>('/settings/guest-voting', { enabled }),
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: ['settings'] })
+    },
+  })
 
   const stats = dash.data
     ? [
@@ -72,6 +90,29 @@ export function AdminOverview() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-base">Guest voting</CardTitle>
+          </CardHeader>
+          <CardContent className="pt-0">
+            <div className="flex items-center justify-between gap-3">
+              <div className="flex flex-col gap-1">
+                <p className="text-sm text-muted-foreground">
+                  Allow signed-out visitors to vote. When off, voting requires login.
+                </p>
+                {guestVotingMutation.isError && (
+                  <p className="text-xs text-destructive">{errorMessage(guestVotingMutation.error)}</p>
+                )}
+              </div>
+              <Switch
+                checked={settingsQuery.data?.guestVotingEnabled ?? false}
+                disabled={settingsQuery.isLoading || guestVotingMutation.isPending}
+                onCheckedChange={(v) => guestVotingMutation.mutate(v)}
+                aria-label="Toggle guest voting"
+              />
+            </div>
+          </CardContent>
+        </Card>
         <Card>
           <CardHeader>
             <CardTitle className="text-base">Newest servers</CardTitle>
