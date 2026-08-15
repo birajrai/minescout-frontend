@@ -66,7 +66,7 @@ export function ImageField({ label, value, onChange, kind, hint }: {
           <input
             ref={inputRef}
             type="file"
-            accept="image/png,image/jpeg,image/webp,image/gif"
+            accept="image/png,image/jpeg,image/webp,image/gif,image/avif,image/svg+xml,image/tiff,image/bmp,image/heic,image/heif"
             className="hidden"
             onChange={(e) => pick(e.target.files?.[0])}
           />
