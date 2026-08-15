@@ -3,6 +3,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { AuthProvider } from './auth'
 import { ThemeProvider } from './theme'
 import { LayoutWidthProvider } from './layout-width'
+import { SpaLinks } from './spa-links'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -24,7 +25,10 @@ export function Providers({ children }: { children: ReactNode }) {
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <ThemeProvider>
-          <LayoutWidthProvider>{children}</LayoutWidthProvider>
+          <LayoutWidthProvider>
+            <SpaLinks />
+            {children}
+          </LayoutWidthProvider>
         </ThemeProvider>
       </AuthProvider>
     </QueryClientProvider>
