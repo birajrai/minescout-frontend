@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { NavLink, Outlet, Link, useLocation } from 'react-router'
 import {
   LayoutDashboard,
@@ -154,6 +154,10 @@ export function AdminLayout() {
   const { toggle } = useTheme()
   const [mobileOpen, setMobileOpen] = useState(false)
   const { user, isAdmin } = useAuth()
+
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [pathname])
 
   const title = TITLES[pathname] ?? 'Admin'
   const isDark = typeof document !== 'undefined' && document.documentElement.classList.contains('dark')

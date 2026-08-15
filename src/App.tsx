@@ -116,28 +116,6 @@ function App() {
           <Route path="settings" element={<DashboardSettings />} />
           <Route path="*" element={<DashboardHome />} />
         </Route>
-        <Route
-          path="admin"
-          element={
-            <RequireAuth adminOnly>
-              <AdminLayout />
-            </RequireAuth>
-          }
-        >
-          <Route index element={<AdminOverview />} />
-          <Route path="servers" element={<AdminServers />} />
-          <Route path="moderation" element={<AdminModeration />} />
-          <Route path="ads" element={<AdminAds />} />
-          <Route path="content" element={<AdminContent />} />
-          <Route path="content/blog/new" element={<BlogEditor />} />
-          <Route path="content/blog/:id/edit" element={<BlogEditor />} />
-          <Route path="tags" element={<AdminTags />} />
-          <Route path="chest" element={<AdminChest />} />
-          <Route path="users" element={<AdminUsers />} />
-          <Route path="api-keys" element={<AdminApiKeys />} />
-          <Route path="placements" element={<AdminPlacements />} />
-          <Route path="billing" element={<AdminBilling />} />
-        </Route>
         <Route path=":slug" element={<ServerLayout />}>
           <Route index element={<ServerOverview />} />
           <Route path="vote" element={<ServerVote />} />
@@ -145,6 +123,29 @@ function App() {
           <Route path="stats" element={<ServerStats />} />
         </Route>
         <Route path="realm/:code" element={<RealmPage />} />
+        <Route path="*" element={<NotFound />} />
+      </Route>
+      <Route
+        path="admin"
+        element={
+          <RequireAuth adminOnly>
+            <AdminLayout />
+          </RequireAuth>
+        }
+      >
+        <Route index element={<AdminOverview />} />
+        <Route path="servers" element={<AdminServers />} />
+        <Route path="moderation" element={<AdminModeration />} />
+        <Route path="ads" element={<AdminAds />} />
+        <Route path="content" element={<AdminContent />} />
+        <Route path="content/blog/new" element={<BlogEditor />} />
+        <Route path="content/blog/:id/edit" element={<BlogEditor />} />
+        <Route path="tags" element={<AdminTags />} />
+        <Route path="chest" element={<AdminChest />} />
+        <Route path="users" element={<AdminUsers />} />
+        <Route path="api-keys" element={<AdminApiKeys />} />
+        <Route path="placements" element={<AdminPlacements />} />
+        <Route path="billing" element={<AdminBilling />} />
         <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>
