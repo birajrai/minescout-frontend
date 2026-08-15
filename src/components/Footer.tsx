@@ -47,7 +47,7 @@ export function Footer() {
             <div className="footer-link-wrapper">
               <span className="font-minecraft text-lg">Contact</span>
               <div className="flex flex-col gap-2">
-                <a className="footer-link" href="/pages/support">support@minescout.io</a>
+                <a className="footer-link" href="/pages/support">support@minescout.bond</a>
                 <a className="footer-link" href="/pages/support">Support form</a>
                 <a className="footer-link" href="https://discord.gg/EV5hpQU8Z9" target="_blank" rel="noopener noreferrer">Discord</a>
               </div>
