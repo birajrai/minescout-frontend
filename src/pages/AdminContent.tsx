@@ -36,10 +36,6 @@ export function AdminContent() {
     return entries.filter((p) => p.slug.includes(query) || p.title.toLowerCase().includes(query))
   }, [q, posts.data])
 
-  if (posts.isLoading || pages.isLoading) return <TableRowsSkeleton />
-  if (posts.error) return <ErrorState error={posts.error} onRetry={() => void posts.refetch()} />
-  if (pages.error) return <ErrorState error={pages.error} onRetry={() => void pages.refetch()} />
-
   return (
     <div className="flex flex-col gap-6">
       <div className="flex flex-col gap-1">
@@ -60,6 +56,11 @@ export function AdminContent() {
           </Button>
         </CardHeader>
         <CardContent className="p-0">
+          {posts.isLoading ? (
+            <TableRowsSkeleton />
+          ) : posts.error ? (
+            <ErrorState error={posts.error} onRetry={() => void posts.refetch()} />
+          ) : (
           <div className="flex flex-col divide-y">
             {filteredPosts.length === 0 && <div className="p-8 text-center text-sm text-muted-foreground">No posts found.</div>}
             {filteredPosts.map((p) => (
@@ -90,6 +91,7 @@ export function AdminContent() {
               </div>
             ))}
           </div>
+          )}
         </CardContent>
       </Card>
 
@@ -98,6 +100,11 @@ export function AdminContent() {
           <CardTitle className="text-base">CMS pages ({pages.data?.length ?? 0})</CardTitle>
         </CardHeader>
         <CardContent className="pt-0">
+          {pages.isLoading ? (
+            <TableRowsSkeleton />
+          ) : pages.error ? (
+            <ErrorState error={pages.error} onRetry={() => void pages.refetch()} />
+          ) : (
           <div className="flex flex-wrap gap-2">
             {(pages.data ?? []).map((p) => (
               <a key={p.slug} href={`/pages/${p.slug}`} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-md border bg-secondary/50 px-3 py-1.5 text-xs font-medium hover:border-primary/60 hover:bg-secondary transition-colors">
@@ -106,6 +113,7 @@ export function AdminContent() {
               </a>
             ))}
           </div>
+          )}
         </CardContent>
       </Card>
 

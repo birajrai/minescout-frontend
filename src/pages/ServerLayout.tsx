@@ -61,11 +61,6 @@ export function ServerLayout() {
     },
   })
 
-  if (query.isLoading) return <ContentSkeleton />
-  if (query.error) {
-    if ((query.error as ApiError).status === 404) return <NotFound />
-    return <ErrorState error={query.error} onRetry={() => void query.refetch()} />
-  }
   const server = query.data as Server
 
   const toggleSaveChest = () => {
@@ -102,9 +97,11 @@ export function ServerLayout() {
     }
   }
 
-  const players = server.online
-    ? formatPlayers(server.playersOnline, server.playersMax)
-    : `${server.playersOnline}/${server.playersMax}`
+  const players = server
+    ? server.online
+      ? formatPlayers(server.playersOnline, server.playersMax)
+      : `${server.playersOnline}/${server.playersMax}`
+    : ''
 
   return (
     <>
@@ -117,7 +114,7 @@ export function ServerLayout() {
           </div>
           <h1 className="server-hero__title font-minecraft text-stone-100">
             <span>
-              {server.name} <br className="server-hero__title-break" />{' '}
+              {server ? server.name : 'Loading…'} <br className="server-hero__title-break" />{' '}
               <span className="server-hero__subtitle">Server IP, Website Link, Reviews and Vote Link</span>
             </span>
           </h1>
@@ -127,7 +124,7 @@ export function ServerLayout() {
                 <Link className="hover:text-stone-100 transition-colors" to="/" title="Minescout Home">Home</Link>
               </li>
               <li aria-hidden="true"><span className="text-stone-500">/</span></li>
-              <li><span className="text-stone-100">{server.name}</span></li>
+              <li><span className="text-stone-100">{server ? server.name : 'Loading…'}</span></li>
             </ol>
           </nav>
         </div>
@@ -136,7 +133,10 @@ export function ServerLayout() {
       <div className="wrapper flex flex-col gap-4 xl:p-0 px-3">
         <section className="grid grid-cols-1 md:grid-cols-8 lg:grid-cols-4 md:border rounded-sm overflow-hidden border-border">
           <aside className="col-span-1 md:col-span-3 lg:col-span-1 bg-stone-300 dark:bg-stone-900 md:m-0 p-4 md:border-r dark:border-r-0">
-            <div className="flex flex-col gap-4">
+            {query.isLoading ? (
+              <ContentSkeleton />
+            ) : server ? (
+              <div className="flex flex-col gap-4">
               <div className="flex gap-2 items-center cursor-help min-w-0">
                 <img src={server.icon} alt={`${server.name} Minecraft Server Icon`} className="size-8 aspect-square rounded pointer-events-none select-none object-cover" width="32" height="32" loading="lazy" data-placeholder="/assets/placeholder-server-icon.svg" onError={(e) => { const el = e.currentTarget; el.onerror = null; el.src = el.dataset.placeholder || '' }} />
                 <span className="text-2xl text-left font-minecraft break-words min-w-0">{server.name}</span>
@@ -253,6 +253,7 @@ export function ServerLayout() {
                 </button>
               </div>
             </div>
+            ) : null}
           </aside>
           <main id="vote-now" className="col-span-1 md:col-span-5 lg:col-span-3 bg-stone-300/50 dark:bg-stone-900/50 p-0 md:p-4 flex flex-col mt-2 md:mt-0">
             <div className="md:mt-0 flex flex-col flex-1 min-h-0">
@@ -264,9 +265,11 @@ export function ServerLayout() {
                     end={t.end}
                     className={({ isActive }) => `server-tab-link ${isActive ? 'is-active' : ''}`}
                     title={
-                      t.to === ''
-                        ? `${server.name} Minecraft Server Info`
-                        : `${t.label} for ${server.name}`
+                      server
+                        ? t.to === ''
+                          ? `${server.name} Minecraft Server Info`
+                          : `${t.label} for ${server.name}`
+                        : undefined
                     }
                   >
                     {t.label}
@@ -274,14 +277,20 @@ export function ServerLayout() {
                 ))}
               </nav>
               <div id="server-tab-panel" className="server-tab-panel bg-stone-300 dark:bg-stone-900 p-4 md:p-4 flex-1 min-h-0 flex flex-col -mt-px">
-                <Outlet context={{ server, slug }} />
+                {query.isLoading ? (
+                  <ContentSkeleton />
+                ) : query.error ? (
+                  (query.error as ApiError).status === 404 ? <NotFound /> : <ErrorState error={query.error} onRetry={() => void query.refetch()} />
+                ) : server ? (
+                  <Outlet context={{ server, slug }} />
+                ) : null}
               </div>
             </div>
           </main>
         </section>
       </div>
 
-      {reportOpen && (
+      {reportOpen && server && (
         <div className="fixed inset-0 z-[140] flex items-center justify-center p-4" role="dialog" aria-modal="true" aria-labelledby="report-title">
           <div className="absolute inset-0 bg-stone-900/60 dark:bg-stone-950/80" aria-hidden="true" onClick={() => setReportOpen(false)} />
           <div className="relative w-full max-w-md rounded-sm border border-stone-400 dark:border-stone-600 bg-stone-100 dark:bg-stone-900 p-6 flex flex-col gap-4">

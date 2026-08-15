@@ -17,16 +17,15 @@ function Stars({ rating }: { rating: number }) {
 export function ReputationPage() {
   const q = useMyReputation()
 
-  if (q.isLoading) return <ContentSkeleton />
-  if (q.error) return <ErrorState error={q.error} onRetry={() => void q.refetch()} />
-
   const rep = q.data!
-  const stats = [
-    { label: 'Reviews received', value: rep.received.count, icon: MessageSquare },
-    { label: 'Average rating', value: rep.received.count ? rep.received.avgRating.toFixed(2) : '—', icon: Star },
-    { label: 'Votes received', value: rep.received.votes, icon: Vote },
-    { label: 'Reviews written', value: rep.written.count, icon: MessageSquare },
-  ]
+  const stats = q.data
+    ? [
+        { label: 'Reviews received', value: rep.received.count, icon: MessageSquare },
+        { label: 'Average rating', value: rep.received.count ? rep.received.avgRating.toFixed(2) : '—', icon: Star },
+        { label: 'Votes received', value: rep.received.votes, icon: Vote },
+        { label: 'Reviews written', value: rep.written.count, icon: MessageSquare },
+      ]
+    : []
 
   return (
     <div className="flex flex-col gap-4">
@@ -37,6 +36,12 @@ export function ReputationPage() {
         </p>
       </div>
 
+      {q.isLoading ? (
+        <ContentSkeleton />
+      ) : q.error ? (
+        <ErrorState error={q.error} onRetry={() => void q.refetch()} />
+      ) : (
+        <>
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
         {stats.map((s) => (
           <div key={s.label} className="rounded-sm border border-stone-300 dark:border-stone-600 bg-stone-200/50 dark:bg-stone-800/50 p-4">
@@ -115,6 +120,8 @@ export function ReputationPage() {
           </div>
         )}
       </div>
+        </>
+      )}
     </div>
   )
 }

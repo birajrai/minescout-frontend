@@ -1,7 +1,17 @@
-import { lazy } from 'react'
 import { Routes, Route, Navigate, useParams } from 'react-router'
 import { RootLayout } from './layouts/RootLayout'
 import { RequireAuth } from './lib/auth'
+import { Home } from './pages/Home'
+import { ServerList } from './pages/ServerList'
+import { GameModes, Versions, Countries, Tags } from './pages/Facets'
+import { SearchPage } from './pages/SearchPage'
+import { ContentPage } from './pages/ContentPage'
+import { ToolsPage } from './pages/ToolsPage'
+import { MotdGenerator } from './pages/MotdGenerator'
+import { BlogIndex, BlogPost } from './pages/Blog'
+import { StatsPage } from './pages/StatsPage'
+import { LoginPage } from './pages/LoginPage'
+import { RegisterPage } from './pages/RegisterPage'
 import { DashboardLayout } from './pages/DashboardLayout'
 import { DashboardHome } from './pages/dashboard/DashboardHome'
 import { AddServer } from './pages/dashboard/AddServer'
@@ -32,22 +42,6 @@ import { BlogEditor } from './pages/BlogEditor'
 import { AdminTags } from './pages/AdminTags'
 import { AdminChest } from './pages/AdminChest'
 import { NotFound } from './pages/NotFound'
-
-const Home = lazy(() => import('./pages/Home').then((m) => ({ default: m.Home })))
-const ServerList = lazy(() => import('./pages/ServerList').then((m) => ({ default: m.ServerList })))
-const GameModes = lazy(() => import('./pages/Facets').then((m) => ({ default: m.GameModes })))
-const Versions = lazy(() => import('./pages/Facets').then((m) => ({ default: m.Versions })))
-const Countries = lazy(() => import('./pages/Facets').then((m) => ({ default: m.Countries })))
-const Tags = lazy(() => import('./pages/Facets').then((m) => ({ default: m.Tags })))
-const SearchPage = lazy(() => import('./pages/SearchPage').then((m) => ({ default: m.SearchPage })))
-const ContentPage = lazy(() => import('./pages/ContentPage').then((m) => ({ default: m.ContentPage })))
-const ToolsPage = lazy(() => import('./pages/ToolsPage').then((m) => ({ default: m.ToolsPage })))
-const MotdGenerator = lazy(() => import('./pages/MotdGenerator').then((m) => ({ default: m.MotdGenerator })))
-const BlogIndex = lazy(() => import('./pages/Blog').then((m) => ({ default: m.BlogIndex })))
-const BlogPost = lazy(() => import('./pages/Blog').then((m) => ({ default: m.BlogPost })))
-const StatsPage = lazy(() => import('./pages/StatsPage').then((m) => ({ default: m.StatsPage })))
-const LoginPage = lazy(() => import('./pages/LoginPage').then((m) => ({ default: m.LoginPage })))
-const RegisterPage = lazy(() => import('./pages/RegisterPage').then((m) => ({ default: m.RegisterPage })))
 
 const MIGRATED_PAGE_SLUGS = new Set([
   'how-to-get-more-players-on-a-minecraft-server',

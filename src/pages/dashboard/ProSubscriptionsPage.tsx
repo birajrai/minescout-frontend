@@ -67,10 +67,6 @@ export function ProSubscriptionsPage() {
     )
   }
 
-  if (billing.isLoading) return <ContentSkeleton />
-  if (billing.error) return <ErrorState error={billing.error} onRetry={() => void billing.refetch()} />
-  if (myServers.isLoading) return <ContentSkeleton />
-
   const statusBadge =
     sub === null ? (
       <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-bold bg-stone-400/20 text-stone-600 dark:text-stone-400">Free</span>
@@ -89,13 +85,19 @@ export function ProSubscriptionsPage() {
       <div className="flex flex-col gap-1">
         <div className="flex flex-wrap items-center gap-3">
           <h2 className="font-minecraft text-xl text-stone-900 dark:text-stone-100">Pro Subscriptions</h2>
-          {statusBadge}
+          {billing.data && statusBadge}
         </div>
         <p className="text-sm text-stone-600 dark:text-stone-400">
           Free is free forever. Upgrade to Pro to feature one of your servers in listings and climb the rankings.
         </p>
       </div>
 
+      {billing.isLoading ? (
+        <ContentSkeleton />
+      ) : billing.error ? (
+        <ErrorState error={billing.error} onRetry={() => void billing.refetch()} />
+      ) : (
+        <>
       {paid && (
         <div className="rounded-sm border border-lime-600/40 bg-lime-500/10 px-3 py-2 text-sm text-lime-700 dark:text-lime-400">
           Payment received — your Pro subscription is being activated. If it doesn't activate shortly, contact support.
@@ -171,7 +173,9 @@ export function ProSubscriptionsPage() {
       {/* Checkout */}
       <form onSubmit={submit} className="flex flex-col gap-3 rounded-sm border border-stone-400/60 dark:border-stone-600 bg-stone-200/40 dark:bg-stone-800/40 p-4">
         <h3 className="font-minecraft text-sm text-stone-800 dark:text-stone-200">Start / renew Pro</h3>
-        {servers.length === 0 ? (
+        {myServers.isLoading ? (
+          <ContentSkeleton />
+        ) : servers.length === 0 ? (
           <div className="rounded-sm border border-stone-400/60 dark:border-stone-600 bg-stone-200/50 dark:bg-stone-800/50 p-6 text-center text-sm text-stone-500 dark:text-stone-400">
             You need a server to apply Pro to.{' '}
             <Link to="/dashboard/servers/add" className="text-primary hover:underline">Add your first server</Link>.
@@ -227,6 +231,8 @@ export function ProSubscriptionsPage() {
           </div>
         )}
       </form>
+        </>
+      )}
     </div>
   )
 }

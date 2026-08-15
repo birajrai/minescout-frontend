@@ -59,8 +59,6 @@ export function DashboardRealms() {
     create.mutate()
   }
 
-  if (list.isLoading) return <ContentSkeleton />
-
   return (
     <div className="flex flex-col gap-4">
       <div className="flex items-center justify-between gap-4">
@@ -70,7 +68,9 @@ export function DashboardRealms() {
         Realms are themed landing pages for your community. Create one with a short code and share it as <span className="font-mono text-xs">yourdomain/realm/CODE</span>.
       </p>
 
-      {mine.length > 0 ? (
+      {list.isLoading ? (
+        <ContentSkeleton />
+      ) : mine.length > 0 ? (
         <div className="rounded-sm border border-stone-400/60 dark:border-stone-600 overflow-hidden">
           {mine.map((r) => (
             <div key={r.code} className="flex flex-wrap items-center justify-between gap-3 p-3 border-b border-stone-400/40 dark:border-stone-700 last:border-0">

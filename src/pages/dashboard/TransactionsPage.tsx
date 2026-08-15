@@ -15,9 +15,6 @@ const STATUS_BADGE: Record<string, { label: string; cls: string }> = {
 export function TransactionsPage() {
   const q = useMyTransactions()
 
-  if (q.isLoading) return <TableRowsSkeleton />
-  if (q.error) return <ErrorState error={q.error} onRetry={() => void q.refetch()} />
-
   const txs = q.data ?? []
 
   return (
@@ -29,7 +26,11 @@ export function TransactionsPage() {
         </p>
       </div>
 
-      {txs.length === 0 ? (
+      {q.isLoading ? (
+        <TableRowsSkeleton />
+      ) : q.error ? (
+        <ErrorState error={q.error} onRetry={() => void q.refetch()} />
+      ) : txs.length === 0 ? (
         <div className="rounded-sm border border-stone-400/60 dark:border-stone-600 bg-stone-200/50 dark:bg-stone-800/50 p-8 text-center text-sm text-stone-500 dark:text-stone-400 flex flex-col items-center gap-3">
           <Receipt className="size-8 text-stone-400" aria-hidden="true" />
           <p>No transactions yet.</p>

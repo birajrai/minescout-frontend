@@ -3,15 +3,12 @@ import { ExternalLink, Plus, Pencil, Server as ServerIcon } from 'lucide-react'
 import { useMyServers } from '../../lib/servers'
 import { useGlobalStats } from '../../lib/servers'
 import { ErrorState } from '../../components/Async'
-import { ContentSkeleton } from '../../components/Skeletons'
+import { TableRowsSkeleton } from '../../components/Skeletons'
 import type { Server } from '../../lib/types'
 
 export function DashboardHome() {
   const myServers = useMyServers()
   const stats = useGlobalStats()
-
-  if (myServers.isLoading) return <ContentSkeleton />
-  if (myServers.error) return <ErrorState error={myServers.error} onRetry={() => void myServers.refetch()} />
 
   const servers = myServers.data ?? []
 
@@ -46,7 +43,11 @@ export function DashboardHome() {
 
       <div className="flex flex-col gap-2">
         <h3 className="font-minecraft text-lg text-stone-800 dark:text-stone-200">Your servers ({servers.length})</h3>
-        {servers.length === 0 ? (
+        {myServers.isLoading ? (
+          <TableRowsSkeleton />
+        ) : myServers.error ? (
+          <ErrorState error={myServers.error} onRetry={() => void myServers.refetch()} />
+        ) : servers.length === 0 ? (
           <div className="bg-stone-200 dark:bg-stone-800 text-stone-900 dark:text-stone-100 text-center p-4 rounded-sm border border-stone-300 dark:border-stone-600">
             <ServerIcon className="size-8 mx-auto mb-2 text-stone-400" aria-hidden="true" />
             <p className="text-sm">You don't have any servers yet.</p>

@@ -13,9 +13,6 @@ const TYPE_LABEL: Record<string, string> = {
 export function SponsoredSlotsPage() {
   const q = useMyPlacements()
 
-  if (q.isLoading) return <ContentSkeleton />
-  if (q.error) return <ErrorState error={q.error} onRetry={() => void q.refetch()} />
-
   const slots = q.data ?? []
 
   return (
@@ -27,7 +24,11 @@ export function SponsoredSlotsPage() {
         </p>
       </div>
 
-      {slots.length === 0 ? (
+      {q.isLoading ? (
+        <ContentSkeleton />
+      ) : q.error ? (
+        <ErrorState error={q.error} onRetry={() => void q.refetch()} />
+      ) : slots.length === 0 ? (
         <div className="rounded-sm border border-stone-400/60 dark:border-stone-600 bg-stone-200/50 dark:bg-stone-800/50 p-8 text-center text-sm text-stone-500 dark:text-stone-400 flex flex-col items-center gap-3">
           <Megaphone className="size-8 text-stone-400" aria-hidden="true" />
           <p>You don't have any sponsored or featured placements yet.</p>

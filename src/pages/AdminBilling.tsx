@@ -19,9 +19,6 @@ export function AdminBilling() {
   const setStatus = useAdminSetTxStatus()
   const sweep = useAdminBillingSweep()
 
-  if (list.isLoading) return <TableRowsSkeleton />
-  if (list.error) return <ErrorState error={list.error} onRetry={() => void list.refetch()} />
-
   const txs = list.data ?? []
 
   return (
@@ -36,7 +33,11 @@ export function AdminBilling() {
         </Button>
       </div>
 
-      {txs.length === 0 ? (
+      {list.isLoading ? (
+        <TableRowsSkeleton />
+      ) : list.error ? (
+        <ErrorState error={list.error} onRetry={() => void list.refetch()} />
+      ) : txs.length === 0 ? (
         <div className="rounded-lg border bg-card p-10 text-center text-sm text-muted-foreground">No transactions yet.</div>
       ) : (
         <Card>

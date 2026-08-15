@@ -131,6 +131,43 @@ export function ServerList() {
     return null
   }, [category, gamemodeSlug, versionSlug, countrySlug, tagSlug, gamemodes.data, versions.data, countries.data])
 
+  const fallbackMeta = useMemo<RouteMeta | null>(() => {
+    if (category) return CATEGORY_META[category]
+    if (gamemodeSlug) {
+      return {
+        title: `${gamemodeSlug} Minecraft Servers`,
+        heading2: `Best ${gamemodeSlug} Minecraft Servers by Voting`,
+        crumb: gamemodeSlug,
+        filters: { gamemode: gamemodeSlug },
+      }
+    }
+    if (versionSlug) {
+      return {
+        title: `Minecraft ${versionSlug} Servers`,
+        heading2: `Best Minecraft ${versionSlug} Servers by Voting`,
+        crumb: versionSlug,
+        filters: { version: versionSlug },
+      }
+    }
+    if (countrySlug) {
+      return {
+        title: `Minecraft Servers in ${countrySlug}`,
+        heading2: `Best Minecraft Servers in ${countrySlug}`,
+        crumb: countrySlug,
+        filters: { country: countrySlug },
+      }
+    }
+    if (tagSlug) {
+      return {
+        title: `${tagSlug} Minecraft Servers`,
+        heading2: `Best ${tagSlug} Minecraft Servers`,
+        crumb: tagSlug,
+        filters: { tag: tagSlug },
+      }
+    }
+    return null
+  }, [category, gamemodeSlug, versionSlug, countrySlug, tagSlug])
+
   const needsFacet = Boolean(gamemodeSlug || versionSlug || countrySlug)
   const facetLoading = needsFacet && (gamemodes.isLoading || versions.isLoading || countries.isLoading)
   const facetError = needsFacet && (gamemodes.error || versions.error || countries.error)
@@ -146,22 +183,22 @@ export function ServerList() {
     { enabled: Boolean(meta) && !facetLoading }
   )
 
-  if (facetError) return <ErrorState error={facetError} onRetry={() => undefined} />
-  if (!meta) return null
-  if (facetLoading || listQuery.isLoading) return <div className="flex flex-col gap-3">{Array.from({ length: 3 }).map((_, i) => <ListingCardSkeleton key={i} />)}</div>
-  if (listQuery.error) return <ErrorState error={listQuery.error} onRetry={() => void listQuery.refetch()} />
+  const displayMeta = meta ?? fallbackMeta ?? { title: 'Minecraft Servers', heading2: 'Minecraft Servers', crumb: 'Servers', filters: {} }
+  const crumbs = [{ to: '/', label: 'Home' }, { label: displayMeta.crumb }]
 
   const sponsored = (listQuery.data?.results ?? []).filter((s) => s.featured)
   const ranked = (listQuery.data?.results ?? []).filter((s) => !s.featured)
   const totalPages = listQuery.data?.totalPages ?? 1
-  const crumbs = [{ to: '/', label: 'Home' }, { label: meta.crumb }]
   const baseRank = (page - 1) * (listQuery.data?.limit ?? 10)
+
+  const isLoading = facetLoading || listQuery.isLoading
+  const listError = facetError || listQuery.error
 
   return (
     <>
-      <PageHero crumbs={crumbs} title={meta.title} />
+      <PageHero crumbs={crumbs} title={displayMeta.title} />
       <section className="wrapper flex flex-col gap-4 px-3 py-4">
-        {sponsored.length > 0 && (
+        {!isLoading && !listError && sponsored.length > 0 && (
           <div className="rounded-lg border border-stone-300 dark:border-stone-600 bg-stone-200/30 dark:bg-stone-800/30 p-3 flex flex-col gap-3">
             <h2 className="text-lg font-minecraft text-stone-800 dark:text-stone-200 flex items-center gap-2">
               <span className="inline-flex items-center rounded border border-yellow-600 bg-gradient-to-r from-yellow-500 to-amber-400 text-yellow-900 text-xs font-bold px-2 py-0.5">Sponsored</span>
@@ -175,7 +212,7 @@ export function ServerList() {
           </div>
         )}
         <div className="flex flex-wrap items-center justify-between gap-2">
-          <h2 className="text-xl font-minecraft text-stone-800 dark:text-stone-200">{meta.heading2}</h2>
+          <h2 className="text-xl font-minecraft text-stone-800 dark:text-stone-200">{displayMeta.heading2}</h2>
           <div className="flex items-center gap-2">
             <label htmlFor="list-sort" className="text-xs font-minecraft text-stone-600 dark:text-stone-400">Sort</label>
             <select
@@ -198,7 +235,11 @@ export function ServerList() {
           </div>
         </div>
         <div className="flex flex-col gap-3">
-          {ranked.length === 0 ? (
+          {isLoading ? (
+            <div className="flex flex-col gap-3">{Array.from({ length: 3 }).map((_, i) => <ListingCardSkeleton key={i} />)}</div>
+          ) : listError ? (
+            <ErrorState error={listError} onRetry={() => { if (!facetError) void listQuery.refetch() }} />
+          ) : ranked.length === 0 ? (
             <div className="py-16 text-center text-stone-500 dark:text-stone-400">
               <p>No servers found. Try a different category.</p>
             </div>
@@ -206,7 +247,7 @@ export function ServerList() {
             ranked.map((s, i) => <ListingCard key={s.slug} server={s} rank={`#${baseRank + i + 1}`} />)
           )}
         </div>
-        {totalPages > 1 && (
+        {!isLoading && !listError && totalPages > 1 && (
           <div className="pagination-wrap relative flex flex-col items-center gap-4 py-4">
             <nav role="navigation" aria-label="pagination" className="mx-auto flex w-full max-w-full items-center justify-center gap-1">
               <ul className="flex min-w-0 flex-row flex-nowrap items-center gap-1 overflow-x-auto">

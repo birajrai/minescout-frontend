@@ -23,8 +23,6 @@ export function DashboardSettings() {
     },
   })
 
-  if (settings.isLoading) return <ContentSkeleton />
-
   return (
     <div className="flex flex-col gap-4 max-w-2xl">
       <h2 className="font-minecraft text-xl text-stone-900 dark:text-stone-100">Dashboard settings</h2>
@@ -37,7 +35,9 @@ export function DashboardSettings() {
           </div>
           <span className="inline-flex px-2 py-0.5 rounded text-xs font-bold bg-stone-400/20 text-stone-600 dark:text-stone-300">System</span>
         </div>
-        {isAdmin ? (
+        {settings.isLoading ? (
+          <ContentSkeleton />
+        ) : isAdmin ? (
           <form
             className="flex flex-col sm:flex-row gap-2"
             onSubmit={(e) => {
@@ -69,7 +69,11 @@ export function DashboardSettings() {
           <span className="text-sm font-bold text-stone-800 dark:text-stone-200">Cache revision</span>
           <span className="text-xs text-stone-500 dark:text-stone-400">Bumped when site-wide data is rebuilt.</span>
         </div>
-        <span className="font-mono text-sm text-stone-700 dark:text-stone-300">{settings.data?.cacheRevision ?? 0}</span>
+        {settings.isLoading ? (
+          <ContentSkeleton lines={1} />
+        ) : (
+          <span className="font-mono text-sm text-stone-700 dark:text-stone-300">{settings.data?.cacheRevision ?? 0}</span>
+        )}
       </div>
     </div>
   )

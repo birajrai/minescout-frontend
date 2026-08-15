@@ -5,7 +5,7 @@ import { useFacets } from '../lib/servers'
 import { useChest } from '../lib/chest'
 import { ErrorState } from '../components/Async'
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card'
-import { Skeleton } from '../components/ui/skeleton'
+import { CardGridSkeleton } from '../components/Skeletons'
 import { cn } from '../lib/utils'
 
 export function AdminOverview() {
@@ -15,30 +15,20 @@ export function AdminOverview() {
   const countries = useFacets('countries')
   const chest = useChest()
 
-  if (dash.isLoading) {
-    return (
-      <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-4">
-        {Array.from({ length: 10 }).map((_, i) => (
-          <Skeleton key={i} className="h-24" />
-        ))}
-      </div>
-    )
-  }
-  if (dash.error) return <ErrorState error={dash.error} onRetry={() => void dash.refetch()} />
-  if (!dash.data) return null
-
-  const stats = [
-    { label: 'Verified servers', value: dash.data.servers, to: '/admin/servers', icon: Server },
-    { label: 'Servers online', value: dash.data.serversOnline, icon: Server },
-    { label: 'Users', value: dash.data.users, to: '/admin/users', icon: Users },
-    { label: 'Game modes', value: gamemodes.data?.length ?? 0, to: '/admin/tags', icon: Hash },
-    { label: 'Versions', value: versions.data?.length ?? 0, to: '/admin/tags', icon: Layers },
-    { label: 'Countries', value: countries.data?.length ?? 0, to: '/admin/tags', icon: Globe },
-    { label: 'Open reports', value: dash.data.openReports, to: '/admin/moderation', icon: ShieldAlert },
-    { label: 'Pending claims', value: dash.data.pendingClaims, to: '/admin/moderation', icon: Tags },
-    { label: 'Votes today', value: dash.data.votesToday, icon: Vote },
-    { label: 'Saved in chests', value: chest.length, to: '/admin/chest', icon: Box },
-  ]
+  const stats = dash.data
+    ? [
+        { label: 'Verified servers', value: dash.data.servers, to: '/admin/servers', icon: Server },
+        { label: 'Servers online', value: dash.data.serversOnline, icon: Server },
+        { label: 'Users', value: dash.data.users, to: '/admin/users', icon: Users },
+        { label: 'Game modes', value: gamemodes.data?.length ?? 0, to: '/admin/tags', icon: Hash },
+        { label: 'Versions', value: versions.data?.length ?? 0, to: '/admin/tags', icon: Layers },
+        { label: 'Countries', value: countries.data?.length ?? 0, to: '/admin/tags', icon: Globe },
+        { label: 'Open reports', value: dash.data.openReports, to: '/admin/moderation', icon: ShieldAlert },
+        { label: 'Pending claims', value: dash.data.pendingClaims, to: '/admin/moderation', icon: Tags },
+        { label: 'Votes today', value: dash.data.votesToday, icon: Vote },
+        { label: 'Saved in chests', value: chest.length, to: '/admin/chest', icon: Box },
+      ]
+    : []
 
   return (
     <div className="flex flex-col gap-6">
@@ -47,6 +37,12 @@ export function AdminOverview() {
         <p className="text-sm text-muted-foreground">Platform health at a glance.</p>
       </div>
 
+      {dash.isLoading ? (
+        <CardGridSkeleton count={10} className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-4" />
+      ) : dash.error ? (
+        <ErrorState error={dash.error} onRetry={() => void dash.refetch()} />
+      ) : !dash.data ? null : (
+        <>
       <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-4">
         {stats.map((s) => {
           const inner = (
@@ -107,6 +103,8 @@ export function AdminOverview() {
           </CardContent>
         </Card>
       </div>
+        </>
+      )}
     </div>
   )
 }

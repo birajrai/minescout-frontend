@@ -62,7 +62,7 @@ export function BlogIndex() {
           )}
         </div>
         {list.isLoading ? (
-          <ContentSkeleton />
+          <ContentSkeleton lines={6} />
         ) : list.error ? (
           <ErrorState error={list.error} onRetry={() => void list.refetch()} />
         ) : (
@@ -121,25 +121,30 @@ export function BlogIndex() {
 export function BlogPost() {
   const { slug } = useParams()
   const query = useBlogPost(slug ?? '')
-
-  if (query.isLoading) return <ContentSkeleton />
-  if (query.error) {
-    if ((query.error as ApiError).status === 404) return <NotFound />
-    return <ErrorState error={query.error} onRetry={() => void query.refetch()} />
-  }
   const post = query.data
-  if (!post) return <NotFound />
 
   return (
     <>
       <PageHero
-        crumbs={[{ to: '/', label: 'Home' }, { to: '/blog', label: 'Blog' }, { label: post.title }]}
-        title={post.title}
+        crumbs={[{ to: '/', label: 'Home' }, { to: '/blog', label: 'Blog' }, { label: post?.title ?? '' }]}
+        title={post?.title ?? ''}
       />
       <article className="wrapper flex flex-col gap-6 max-w-4xl px-4 py-6 md:py-12">
-        <div className="bg-stone-300/50 dark:bg-stone-900/50 p-6 md:p-10 rounded-sm border border-stone-400 dark:border-stone-600">
-          <Markdown source={post.bodyMarkdown} />
-        </div>
+        {query.isLoading ? (
+          <ContentSkeleton />
+        ) : query.error ? (
+          (query.error as ApiError).status === 404 ? (
+            <NotFound />
+          ) : (
+            <ErrorState error={query.error} onRetry={() => void query.refetch()} />
+          )
+        ) : !post ? (
+          <NotFound />
+        ) : (
+          <div className="bg-stone-300/50 dark:bg-stone-900/50 p-6 md:p-10 rounded-sm border border-stone-400 dark:border-stone-600">
+            <Markdown source={post.bodyMarkdown} />
+          </div>
+        )}
       </article>
     </>
   )

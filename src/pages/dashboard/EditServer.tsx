@@ -46,10 +46,6 @@ export function EditServer({ votifier = false }: { votifier?: boolean }) {
     },
   })
 
-  if (serverQuery.isLoading) return <ContentSkeleton />
-  if (serverQuery.error) return <ErrorState error={serverQuery.error} onRetry={() => void serverQuery.refetch()} />
-  if (!server) return null
-
   const submit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     const fd = new FormData(e.currentTarget)
@@ -88,9 +84,16 @@ export function EditServer({ votifier = false }: { votifier?: boolean }) {
     <div className="flex flex-col gap-4 max-w-2xl">
       <div className="flex items-center justify-between gap-4">
         <h2 className="font-minecraft text-xl text-stone-900 dark:text-stone-100">
-          {votifier ? `Votifier · ${server.name}` : `Edit · ${server.name}`}
+          {server ? (votifier ? `Votifier · ${server.name}` : `Edit · ${server.name}`) : votifier ? 'Votifier' : 'Edit server'}
         </h2>
       </div>
+
+      {serverQuery.isLoading ? (
+        <ContentSkeleton />
+      ) : serverQuery.error ? (
+        <ErrorState error={serverQuery.error} onRetry={() => void serverQuery.refetch()} />
+      ) : !server ? null : (
+        <>
       {savedMsg && <p className="rounded-sm border border-lime-600/40 bg-lime-500/10 px-3 py-2 text-sm text-lime-700 dark:text-lime-400">{savedMsg}</p>}
       {save.isError && <p className="rounded-sm border border-red-600/40 bg-red-500/10 px-3 py-2 text-sm text-red-700 dark:text-red-400">{errorMessage(save.error)}</p>}
 
@@ -180,6 +183,8 @@ export function EditServer({ votifier = false }: { votifier?: boolean }) {
           </button>
         </div>
       </form>
+        </>
+      )}
     </div>
   )
 }
